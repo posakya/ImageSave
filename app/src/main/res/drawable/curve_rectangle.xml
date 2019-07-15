@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item>
+        <shape android:shape="rectangle">
+            <padding android:top="35dp"/>
+            <size android:width="200dp"
+                android:height="40dp" />
+            <!--<solid android:color="#1A000bbb" />-->
+            <!--<gradient-->
+            <!--android:angle="45"-->
+            <!--android:centerColor="#00574B"-->
+            <!--android:startColor="#00574B"-->
+            <!--android:endColor="#A100574B"/>-->
+        </shape>
+    </item>
+
+    <!--&lt;!&ndash; This rectangle for the left side &ndash;&gt;-->
+    <!--<item-->
+    <!--android:right="200dp"-->
+    <!--android:left="-200dp"-->
+    <!--android:top="-200dp"-->
+    <!--android:bottom="-200dp">-->
+    <!--<rotate android:fromDegrees="45">-->
+    <!--<shape android:shape="rectangle">-->
+    <!--<padding android:top="-35dp"/>-->
+    <!--<solid android:color="#ffffff" />-->
+    <!--<stroke android:color="#00574B"-->
+    <!--android:width="5dp"/>-->
+    <!--</shape>-->
+    <!--</rotate>-->
+    <!--</item>-->
+
+
+    <item
+        android:left="0dp"
+        android:top="20dp"
+        android:right="-500dp">
+
+            <shape android:shape="rectangle">
+                <size
+                    android:width="5dp"
+                    android:height="10dp"/>
+                <corners android:topLeftRadius="500dp"
+                    android:topRightRadius="500dp"
+                    />
+
+                <solid android:color="#FFF" />
+
+            </shape>
+    </item>
+
+    <!--<item-->
+    <!--android:right="300dp"-->
+    <!--android:left="-200dp"-->
+    <!--android:top="-200dp"-->
+    <!--android:bottom="-200dp">-->
+    <!--<rotate android:fromDegrees="60">-->
+    <!--<shape android:shape="rectangle">-->
+    <!--<padding android:top="-35dp"/>-->
+    <!--<solid android:color="#000" />-->
+    <!--</shape>-->
+    <!--</rotate>-->
+    <!--</item>-->
+
+</layer-list>

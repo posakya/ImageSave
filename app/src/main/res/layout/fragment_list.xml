@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.ListFragment">
+
+    <android.support.v7.widget.RecyclerView
+        android:scrollbarThumbVertical="@color/transparent"
+        android:id="@+id/listView"
+        android:divider="@color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v7.widget.RecyclerView>
+
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:id="@+id/fab"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom|end"-->
+        <!--android:layout_margin="@dimen/fab_margin"-->
+        <!--android:src="@drawable/ic_add_black_24dp"-->
+        <!--android:layout_alignParentEnd="true" />-->
+
+    <ru.dimorinny.floatingtextbutton.FloatingTextButton
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:id="@+id/action_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:floating_background_color="@color/colorAccent"
+        app:floating_left_icon="@drawable/ic_camera_alt_black_24dp"
+        app:floating_title="Generate QR Code"
+        app:floating_title_color="@android:color/white"
+        />
+
+    <!--<Button-->
+        <!--android:padding="15dp"-->
+        <!--android:drawablePadding="5dp"-->
+        <!--android:drawableLeft="@drawable/ic_camera_alt_black_24dp"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:textAllCaps="false"-->
+        <!--android:text="Generate QR Code"-->
+        <!--android:layout_alignParentEnd="false"-->
+        <!--android:layout_alignParentRight="false"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_margin="@dimen/fab_margin"-->
+        <!--android:id="@+id/action_button"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="45dp"-->
+        <!--android:background="@drawable/floating_button"-->
+        <!--/>-->
+
+</RelativeLayout>
