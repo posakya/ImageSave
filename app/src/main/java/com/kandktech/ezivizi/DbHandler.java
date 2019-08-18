@@ -36,6 +36,10 @@ public class DbHandler extends SQLiteOpenHelper {
     public static final String user_logo = "user_logo";
     public static final String color_code = "color_code";
     public static final String used_layout = "used_layout";
+    public static final String company = "company";
+    public static final String color_code_second  = "color_code_second";
+    public static final String fax_no = "fax_no";
+    public static final String po_box_no = "po_box_no";
 
     /*
     creating database
@@ -50,7 +54,7 @@ public class DbHandler extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + table_name + "( _id integer primary key autoincrement ,user_name text,user_address text,user_phone text,user_website text,user_email text,user_position text,user_device_id text,user_logo text,color_code text,used_layout text)");
+        db.execSQL("create table " + table_name + "( _id integer primary key autoincrement ,user_name text,user_address text,user_phone text,user_website text,user_email text,user_position text,user_device_id text,user_logo text,color_code text,used_layout text,company text,color_code_second text,fax_no text,po_box_no text)");
     }
 
     /*
@@ -67,7 +71,7 @@ public class DbHandler extends SQLiteOpenHelper {
     insert data to qr_code_data table
      */
 
-    public void insertData(String user_name1, String user_address1, String user_phone1, String user_website1,String user_email1,String user_position1, String user_device_id1, String logo1,String color_code1,String used_layout1){
+    public void insertData(String user_name1, String user_address1, String user_phone1, String user_website1,String user_email1,String user_position1, String user_device_id1, String logo1,String color_code1,String used_layout1,String company1,String color_code_second1,String fax_no1,String po_box_no1){
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues values=new ContentValues();
         values.put(user_name,user_name1);
@@ -80,6 +84,10 @@ public class DbHandler extends SQLiteOpenHelper {
         values.put(user_logo,logo1);
         values.put(color_code,color_code1);
         values.put(used_layout,used_layout1);
+        values.put(company,company1);
+        values.put(color_code_second,color_code_second1);
+        values.put(fax_no,fax_no1);
+        values.put(po_box_no,po_box_no1);
 
         db.insert(table_name,null,values);
 
@@ -97,7 +105,7 @@ public class DbHandler extends SQLiteOpenHelper {
     public Cursor viewData(){
         SQLiteDatabase db=this.getWritableDatabase();
 
-        Cursor cr =  db.rawQuery( "select _id as _id, user_name, color_code,  user_address,  user_phone,  user_website, user_email, user_position,  user_device_id, user_logo, used_layout from qr_code_data ",null);
+        Cursor cr =  db.rawQuery( "select _id as _id, user_name, color_code,  user_address,  user_phone,  user_website, user_email, user_position,  user_device_id, user_logo, used_layout, company, fax_no,color_code_second,po_box_no from qr_code_data ",null);
 
         if (cr != null) {
             cr.moveToFirst();
@@ -110,72 +118,6 @@ public class DbHandler extends SQLiteOpenHelper {
     }
 
 
-    /*
-
-        retrive user detail
-
-     */
-    public List<SavedUserDetailModelClass> getUserDetails() {
-        // array of columns to fetch
-        String[] columns = {
-                DbHandler._id,
-                DbHandler.user_name,
-               DbHandler.user_email,
-               DbHandler.used_layout,
-                DbHandler.color_code,
-                DbHandler.user_logo,
-                DbHandler.user_website,
-                DbHandler.user_position,
-                DbHandler.user_phone,
-                DbHandler.user_address,
-                DbHandler.user_device_id
-        };
-        // sorting orders
-        String sortOrder = DbHandler.user_name + " ASC";
-
-        List<SavedUserDetailModelClass> beneficiaryList = new ArrayList<>();
-
-        SQLiteDatabase db = this.getReadableDatabase();
-
-
-        Cursor cursor = db.query(DbHandler.table_name, //Table to query
-                columns,    //columns to return
-                null,        //columns for the WHERE clause
-                null,        //The values for the WHERE clause
-                null,       //group the rows
-                null,       //filter by row groups
-                sortOrder); //The sort order
-
-
-        // Traversing through all rows and adding to list
-        if (cursor.moveToFirst()) {
-            do {
-                SavedUserDetailModelClass beneficiary = new SavedUserDetailModelClass();
-                beneficiary.setAddress(cursor.getString(cursor.getColumnIndex(DbHandler.user_address)));
-                beneficiary.setColorCode(cursor.getString(cursor.getColumnIndex(DbHandler.color_code)));
-                beneficiary.setDevice_id(cursor.getString(cursor.getColumnIndex(DbHandler.user_device_id)));
-                beneficiary.setEmail(cursor.getString(cursor.getColumnIndex(DbHandler.user_email)));
-                beneficiary.setName(cursor.getString(cursor.getColumnIndex(DbHandler.user_name)));
-                beneficiary.setPhone(cursor.getString(cursor.getColumnIndex(DbHandler.user_phone)));
-                beneficiary.setPosition(cursor.getString(cursor.getColumnIndex(DbHandler.user_position)));
-                beneficiary.setUsed_layout(cursor.getString(cursor.getColumnIndex(DbHandler.used_layout)));
-                beneficiary.setUser_logo(cursor.getString(cursor.getColumnIndex(DbHandler.user_logo)));
-                beneficiary.setWeb(cursor.getString(cursor.getColumnIndex(DbHandler.user_website)));
-//                  beneficiary.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(BeneficiaryContract.BeneficiaryEntry._ID))));
-//                beneficiary.setName(cursor.getString(cursor.getColumnIndex(BeneficiaryContract.BeneficiaryEntry.COLUMN_BENEFICIARY_NAME)));
-//                beneficiary.setEmail(cursor.getString(cursor.getColumnIndex(BeneficiaryContract.BeneficiaryEntry.COLUMN_BENEFICIARY_EMAIL)));
-//                beneficiary.setAddress(cursor.getString(cursor.getColumnIndex(BeneficiaryContract.BeneficiaryEntry.COLUMN_BENEFICIARY_ADDRESS)));
-//                beneficiary.setCountry(cursor.getString(cursor.getColumnIndex(BeneficiaryContract.BeneficiaryEntry.COLUMN_BENEFICIARY_COUNTRY)));
-//                // Adding user record to list
-                beneficiaryList.add(beneficiary);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        db.close();
-
-        // return user list
-        return beneficiaryList;
-    }
 
     /*
     delete from cart table when quantity = 0;

@@ -21,4 +21,26 @@
         <item name="android:textColor">#000000</item>// change color
     </style>
 
+    <style name="Dialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:windowNoTitle">false</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/fade_in</item>
+        <item name="android:windowExitAnimation">@anim/fade_out</item>
+    </style>
+
+
+    <declare-styleable name="ColorPickerView">
+        <attr format="boolean" name="enableAlpha"/>
+        <attr format="boolean" name="enableBrightness"/>
+        <attr format="boolean" name="onlyUpdateOnTouchEventUp"/>
+    </declare-styleable>
+    <style name="TopDefaultsViewColorPickerPopupAnimation">
+        <item name="android:windowEnterAnimation">@anim/top_defaults_view_color_picker_popup_show</item>
+        <item name="android:windowExitAnimation">@anim/top_defaults_view_color_picker_popup_hide</item>
+    </style>
+
 </resources>

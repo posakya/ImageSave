@@ -11,12 +11,12 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.core.content.ContextCompat;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,21 +27,27 @@ import com.google.zxing.Result;
 import com.kandktech.ezivizi.DbHandler;
 import com.kandktech.ezivizi.FirstPageActivity;
 import com.kandktech.ezivizi.R;
+import com.kandktech.ezivizi.authentication.SharedPreferenceClass;
 import com.kandktech.ezivizi.image_saver.ImageSaver;
 import com.kandktech.ezivizi.model_class.UserModelClass;
-import com.kandktech.ezivizi.progressDialog.ProgressDialogBox;
+import com.kandktech.ezivizi.model_class.User_detail;
+import com.kandktech.ezivizi.progressDialog.ShowProgress;
 import com.kandktech.ezivizi.retrofit_api_client.RetrofitClient;
 import com.kandktech.ezivizi.retrofit_api_interface.ApiInterface;
 import com.scottyab.aescrypt.AESCrypt;
 
 
-import java.io.File;
-import java.io.FileOutputStream;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.net.URL;
 import java.security.GeneralSecurityException;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -55,7 +61,11 @@ public class QRScanFragment extends Fragment implements ZXingScannerView.ResultH
     SharedPreferences permissionPref ;
     DbHandler dbHandler;
     String[] separated;
-    ProgressDialogBox progressDialogBox;
+    ShowProgress showProgress;
+    SharedPreferenceClass sharedPreferenceClass;
+    String image = null;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -78,6 +88,8 @@ public class QRScanFragment extends Fragment implements ZXingScannerView.ResultH
             e.printStackTrace();
         }
 
+        sharedPreferenceClass = new SharedPreferenceClass(getActivity());
+
 
         if (ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.CAMERA)
@@ -95,7 +107,7 @@ public class QRScanFragment extends Fragment implements ZXingScannerView.ResultH
             }
         }
 
-        progressDialogBox = new ProgressDialogBox(getActivity());
+        showProgress = new ShowProgress(getActivity());
 
 
         return mScannerView;
@@ -135,8 +147,12 @@ public class QRScanFragment extends Fragment implements ZXingScannerView.ResultH
 
         System.out.println("Data : "+separated[8]);
 
-        getUserDetails(separated[8]);
+        /*
+        userName + "EZVZ" + address + "EZVZ" + phone + "EZVZ" + email + "EZVZ" + website + "EZVZ" + filename1 + "EZVZ" + position + "EZVZ" + ColorCode + "EZVZ" + userId + "EZVZ" + usedLayout + "EZVZ" + company + "EZVZ" + fax_no + "EZVZ" + po_box_no + "EZVZ" + colorCodeSecond;
 
+         */
+
+        getUserDetails(separated[8]);
 
         mScannerView.resumeCameraPreview(this);
 
@@ -164,7 +180,6 @@ public class QRScanFragment extends Fragment implements ZXingScannerView.ResultH
                 } else {
 
                     try {
-
                         SharedPreferences.Editor editor = permissionPref.edit();
                         editor.putString("allowed","false");
                         editor.apply();
@@ -213,12 +228,14 @@ public class QRScanFragment extends Fragment implements ZXingScannerView.ResultH
         }
     }
 
-    public void getUserDetails(final String deviceId){
+    private void getUserDetails(final String deviceId){
+
+        System.out.println("Image : "+image);
 
         try {
-            if (progressDialogBox == null){
+            if (showProgress == null){
 
-                progressDialogBox.showProgress();
+                showProgress.showProgress();
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -233,49 +250,23 @@ public class QRScanFragment extends Fragment implements ZXingScannerView.ResultH
             @Override
             public void onResponse(Call<UserModelClass> call, final Response<UserModelClass> response) {
                 if (response.isSuccessful()){
+
                     if (response.body() != null) {
-                        new Thread(new Runnable(){
-                            @Override
-                            public void run() {
-                                Bitmap bm = null;
-                                URL url;
-                                try {
-                                    url = new URL(RetrofitClient.imageUrl+response.body().getUser_detail().getImage());
-                                    bm = BitmapFactory.decodeStream(url.openStream());
-                                } catch(Exception e) {
-                                    e.printStackTrace();
-                                }
 
-                                new ImageSaver(getActivity()).
-                                        setFileName(""+response.body().getUser_detail().getImage().replaceAll(RetrofitClient.imageUrl,"")).
-                                        setDirectoryName(".ezvz").
-                                        setExternal(true).
-                                        save(bm);
+                        for (final User_detail userModelClass : response.body().getData()){
 
-                                if (bm != null){
+                           image = userModelClass.getImage();
+                            saveImage(userModelClass.getImage(),deviceId);
 
-                                    dbHandler.deleteDataSingle(deviceId);
-                                    dbHandler.insertData(separated[0],separated[1],separated[2],separated[4],separated[3],separated[6],separated[8],"/storage/emulated/0/Pictures/.ezvz/"+response.body().getUser_detail().getImage().replaceAll(RetrofitClient.imageUrl,""),separated[7],separated[9]);
 
-                                    try {
-                                        if (progressDialogBox != null){
-                                            progressDialogBox.hideProgress();
-                                        }
-                                    }catch (Exception e){
-                                        e.printStackTrace();
-                                    }
+                        }
 
-                                    Intent intent = new Intent(getActivity(), FirstPageActivity.class);
-                                    startActivity(intent);
-                                }
 
-                            }
-                        }).start();
 
                     }else{
                         try {
-                            if (progressDialogBox != null){
-                                progressDialogBox.hideProgress();
+                            if (showProgress != null){
+                                showProgress.hideProgress();
                             }
                         }catch (Exception e){
                             e.printStackTrace();
@@ -294,32 +285,93 @@ public class QRScanFragment extends Fragment implements ZXingScannerView.ResultH
 
     }
 
-//    private void saveBitMap(Bitmap drawView){
-//
-//        File pictureFileDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), ".ezivizi");
-//
-//        if (!pictureFileDir.exists()) {
-//            boolean isDirectoryCreated = pictureFileDir.mkdirs();
-//            if(!isDirectoryCreated)
-//                Log.i("TAG", "Can't create directory to save the image");
-//            return;
-//        }
-//
-//        String filename = pictureFileDir.getPath() +File.separator+System.currentTimeMillis()+".jpg";
-//
-//        File pictureFile = new File(filename);
-//
-//        try {
-//            pictureFile.createNewFile();
-//            FileOutputStream oStream = new FileOutputStream(pictureFile);
-//            drawView.compress(Bitmap.CompressFormat.PNG, 100, oStream);
-//            System.out.println("FileName : "+filename);
-//            oStream.flush();
-//            oStream.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            Log.i("TAG", "There was an issue saving the image.");
-//        }
-//
-//    }
+
+    public void saveImage(final String image, final String deviceId){
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+                Bitmap bm = null;
+                URL url;
+                try {
+                    url = new URL(image);
+                    bm = BitmapFactory.decodeStream(url.openStream());
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+
+                new ImageSaver(getActivity()).
+                        setFileName(""+image.replaceAll(RetrofitClient.imageUrl,"")).
+                        setDirectoryName(".ezvz").
+                        setExternal(true).
+                        save(bm);
+
+                if (bm != null){
+                    dbHandler.deleteDataSingle(deviceId);
+
+                    /*
+                    (String user_name1, String user_address1, String user_phone1, String user_website1,String user_email1,String user_position1, String user_device_id1, String logo1,String color_code1,String used_layout1,String company1,String color_code_second1,String fax_no1,String po_box_no1){
+
+                     */
+
+                    dbHandler.insertData(separated[0],separated[1],separated[2],separated[4],separated[3],separated[6],separated[8],"/storage/emulated/0/Pictures/.ezvz/"+image.replaceAll(RetrofitClient.imageUrl,""),separated[7],separated[9],separated[10],separated[11],separated[12],separated[13]);
+                    saveId(sharedPreferenceClass.getUid(),deviceId);
+                    try {
+                        if (showProgress != null){
+                            showProgress.hideProgress();
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                    Intent intent = new Intent(getActivity(), FirstPageActivity.class);
+                    startActivity(intent);
+                }
+
+            }
+        }).start();
+    }
+
+    private void saveId(String current_user_Id, String saved_user_id){
+
+        ApiInterface saveInterface = RetrofitClient.getFormData().create(ApiInterface.class);
+
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("current_user_id",current_user_Id)
+                .addFormDataPart("saved_user_id",saved_user_id)
+                .build();
+
+        saveInterface.saveId(requestBody).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()){
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(response.body().string());
+                        String status = jsonObject.optString("status");
+
+                        if (status.equals("1")){
+                            Toast.makeText(getActivity(), "Save", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+
+
+    }
+
 }

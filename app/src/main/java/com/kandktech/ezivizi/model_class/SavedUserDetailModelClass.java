@@ -13,9 +13,9 @@ public class SavedUserDetailModelClass {
     String user_logo;
     String colorCode;
     String used_layout;
-
-    public SavedUserDetailModelClass() {
-    }
+    String company;
+    String faxNo;
+    String poBoxNo;
 
     @Override
     public String toString() {
@@ -30,6 +30,9 @@ public class SavedUserDetailModelClass {
                 ", user_logo='" + user_logo + '\'' +
                 ", colorCode='" + colorCode + '\'' +
                 ", used_layout='" + used_layout + '\'' +
+                ", company='" + company + '\'' +
+                ", faxNo='" + faxNo + '\'' +
+                ", poBoxNo='" + poBoxNo + '\'' +
                 '}';
     }
 
@@ -113,16 +116,38 @@ public class SavedUserDetailModelClass {
         this.used_layout = used_layout;
     }
 
-    public SavedUserDetailModelClass(String name, String email, String phone, String web, String address, String position, String device_id, String user_logo, String colorCode, String used_layout) {
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-        this.web = web;
-        this.address = address;
-        this.position = position;
-        this.device_id = device_id;
-        this.user_logo = user_logo;
-        this.colorCode = colorCode;
-        this.used_layout = used_layout;
+    public String getCompany() {
+        return company;
     }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public String getFaxNo() {
+        return faxNo;
+    }
+
+    public void setFaxNo(String faxNo) {
+        this.faxNo = faxNo;
+    }
+
+    public String getPoBoxNo() {
+        return poBoxNo;
+    }
+
+    public void setPoBoxNo(String poBoxNo) {
+        this.poBoxNo = poBoxNo;
+    }
+
+    public SavedUserDetailModelClass() {
+
+        /*
+            empty constructor
+         */
+
+    }
+
+
+
 }

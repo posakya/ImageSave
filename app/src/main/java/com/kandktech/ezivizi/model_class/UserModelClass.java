@@ -1,21 +1,53 @@
 package com.kandktech.ezivizi.model_class;
 
-public class UserModelClass {
-    private User_detail user_detail;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
-    public User_detail getUser_detail ()
-    {
-        return user_detail;
+import java.util.List;
+
+public class UserModelClass {
+
+    @SerializedName("data")
+    @Expose
+    private List<User_detail> data;
+
+    public List<User_detail> getData() {
+        return data;
     }
 
-    public void setUser_detail (User_detail user_detail)
+    public void setData(List<User_detail> data) {
+        this.data = data;
+    }
+
+    private String message;
+
+    private String status;
+
+
+
+    public String getMessage ()
     {
-        this.user_detail = user_detail;
+        return message;
+    }
+
+    public void setMessage (String message)
+    {
+        this.message = message;
+    }
+
+    public String getStatus ()
+    {
+        return status;
+    }
+
+    public void setStatus (String status)
+    {
+        this.status = status;
     }
 
     @Override
     public String toString()
     {
-        return "ClassPojo [user_detail = "+user_detail+"]";
+        return "ClassPojo [data = "+data+", message = "+message+", status = "+status+"]";
     }
 }

@@ -8,12 +8,12 @@ import com.kandktech.ezivizi.R;
 import com.kandktech.ezivizi.validation.Validation;
 
 
-public class ProgressDialogBox {
+public class ShowProgress {
 
     Context context;
     ProgressDialog pDialog;
 
-    public ProgressDialogBox(Context context) {
+    public ShowProgress(Context context) {
         this.context = context;
     }
 

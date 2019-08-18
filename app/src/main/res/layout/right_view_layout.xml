@@ -4,36 +4,1071 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
 
-        <android.support.v7.widget.CardView
+
+        <androidx.cardview.widget.CardView
             android:visibility="gone"
+            android:layout_margin="5dp"
+            app:cardElevation="4dp"
             app:cardBackgroundColor="@color/colorAccent"
-            android:id="@+id/rightView"
+            android:id="@+id/halfView"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_180sdp"
-            app:cardCornerRadius="4dp"
-            app:cardUseCompatPadding="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
+
+                <View
+                    android:id="@+id/view12"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/reverse_triangle"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <TextView
+                    android:id="@+id/txtUserName"
+                    android:layout_width="@dimen/_150sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:ellipsize="end"
+                    android:gravity="end"
+                    android:lineSpacingExtra="2sp"
+                    android:maxLines="2"
+                    android:text="Santosh Kumar Sahani "
+                    android:textColor="#fff"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.134" />
+
+                <TextView
+                    android:id="@+id/txtPosition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp"
+                    android:text="Chief Executive Officer"
+                    android:textColor="#FFF"
+                    android:textSize="@dimen/_9sdp"
+                    app:layout_constraintBottom_toTopOf="@+id/txtUserName"
+                    app:layout_constraintEnd_toEndOf="@+id/txtUserName"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="@+id/txtUserName" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+
+                    app:civ_border_width="1dp"
+                    app:civ_border_color="#dedede"
+                    android:id="@+id/imageView1"
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginTop="5dp"
+                    android:src="@drawable/ezvz"
+                    app:layout_constraintBottom_toTopOf="@+id/txtCompanyName1"
+                    app:layout_constraintEnd_toEndOf="@+id/txtCompanyName1"
+                    app:layout_constraintStart_toStartOf="@+id/txtCompanyName1"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <RelativeLayout
+                    android:id="@+id/locRel1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginBottom="8dp"
+                    app:layout_constraintBottom_toTopOf="@+id/emailRel1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.80">
+
+                    <ImageView
+                        android:id="@+id/locImg1"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:background="@drawable/circle_img"
+                        android:padding="5dp"
+                        android:src="@drawable/ic_location_on_black_24dp" />
+
+                    <TextView
+                        android:id="@+id/txtAddress1"
+                        android:layout_width="@dimen/_125sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginLeft="7dp"
+                        android:layout_toRightOf="@+id/locImg1"
+                        android:lineSpacingExtra="2sp"
+                        android:text="NewRoad House No. 128, Kathmandu, Nepal"
+                        android:textSize="@dimen/_9sdp" />
+
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/phRel1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    app:layout_constraintBottom_toTopOf="@+id/emailRel1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/locRel1">
+
+                    <ImageView
+                        android:id="@+id/phImg1"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:background="@drawable/circle_img"
+                        android:padding="5dp"
+                        android:src="@drawable/ic_local_phone_black_24dp" />
+
+                    <TextView
+                        android:id="@+id/txtPh1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginLeft="7dp"
+                        android:layout_toRightOf="@+id/phImg1"
+                        android:autoLink="phone"
+                        android:text="+977-9860306332"
+                        android:textColor="#000"
+                        android:textSize="@dimen/_9sdp" />
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/emailRel1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginBottom="8dp"
+                    app:layout_constraintBottom_toTopOf="@+id/webRel1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/phRel1">
+
+                    <ImageView
+                        android:id="@+id/emailImg1"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:background="@drawable/circle_img"
+                        android:padding="5dp"
+                        android:src="@drawable/ic_email_black_24dp" />
+
+                    <TextView
+                        android:id="@+id/txtEmail1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginLeft="7dp"
+                        android:layout_toRightOf="@+id/emailImg1"
+                        android:autoLink="email"
+                        android:text="rajasantoshkumargupta@gmail.com"
+                        android:textColor="#000"
+                        android:textSize="@dimen/_9sdp" />
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/webRel1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="7dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/emailRel1">
+
+                    <ImageView
+                        android:id="@+id/webImg1"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:background="@drawable/circle_img"
+                        android:padding="5dp"
+                        android:src="@drawable/ic_vpn_lock_black_24dp" />
+
+                    <TextView
+                        android:id="@+id/txtWeb1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginLeft="7dp"
+                        android:layout_toRightOf="@+id/webImg1"
+                        android:autoLink="web"
+                        android:text="Halfwaiter.com"
+                        android:textColor="#000"
+                        android:textSize="@dimen/_9sdp" />
+
+
+                </RelativeLayout>
+
+                <TextView
+                    android:textAlignment="center"
+                    android:id="@+id/txtCompanyName1"
+                    android:layout_width="@dimen/_130sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:text="Creatu Developers Pvt. Ltd."
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/view12"
+                    app:layout_constraintEnd_toEndOf="@+id/view12"
+                    app:layout_constraintHorizontal_bias="0.07"
+                    app:layout_constraintStart_toStartOf="@+id/view12"
+                    app:layout_constraintTop_toTopOf="@+id/view12"
+                    app:layout_constraintVertical_bias="0.29" />
+
+                <!--<TextView-->
+                <!--android:id="@+id/textView12"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginEnd="8dp"-->
+                <!--android:layout_marginRight="8dp"-->
+                <!--android:text="Fax : 52346789"-->
+                <!--android:textColor="@color/white"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--tools:layout_editor_absoluteY="121dp" />-->
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/colorAccent"
+            android:id="@+id/sideView"
+            app:cardElevation="4dp"
+            android:layout_margin="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_180sdp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:background="@drawable/ic_hell9"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/ic_hell9"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <TextView
+                    android:id="@+id/txtAddress3"
+                    android:layout_width="@dimen/_145sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="35dp"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginBottom="8dp"
+                    android:fontFamily="sans-serif"
+                    android:lineSpacingExtra="2sp"
+                    android:text="NewRoad House No. 128, Kathmandu, Nepal"
+                    android:textColor="@color/black_overlay"
+                    android:textSize="@dimen/_9sdp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view"
+                    app:layout_constraintStart_toStartOf="@+id/view"
+                    app:layout_constraintTop_toTopOf="@+id/view"
+                    app:layout_constraintVertical_bias="0.56" />
+
+                <TextView
+                    android:id="@+id/txtPh3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="35dp"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginBottom="8dp"
+                    android:autoLink="phone"
+                    android:text="+9779860306332"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_9sdp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view"
+                    app:layout_constraintStart_toStartOf="@+id/view"
+                    app:layout_constraintTop_toTopOf="@+id/view"
+                    app:layout_constraintVertical_bias="0.705" />
+
+                <TextView
+                    android:id="@+id/txtEmail3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="35dp"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginTop="8dp"
+                    android:autoLink="email"
+                    android:text="deewanaprince_07@gmail.com"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_9sdp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view"
+                    app:layout_constraintStart_toStartOf="@+id/view"
+                    app:layout_constraintTop_toTopOf="@+id/view"
+                    app:layout_constraintVertical_bias="0.805" />
+
+                <TextView
+                    android:id="@+id/txtWeb3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="35dp"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginTop="8dp"
+                    android:autoLink="web"
+                    android:text="www.halfwiter.com"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_9sdp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view"
+                    app:layout_constraintStart_toStartOf="@+id/view"
+                    app:layout_constraintTop_toTopOf="@+id/view"
+                    app:layout_constraintVertical_bias="0.94" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+
+                    android:id="@+id/imgLogo1"
+                    android:layout_width="@dimen/_60sdp"
+                    android:layout_height="@dimen/_60sdp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:src="@drawable/halfwaiter"
+                    app:layout_constraintBottom_toBottomOf="@+id/view"
+                    app:layout_constraintEnd_toEndOf="@+id/view"
+                    app:layout_constraintHorizontal_bias="0.902"
+                    app:layout_constraintStart_toStartOf="@+id/view"
+                    app:layout_constraintTop_toTopOf="@+id/view"
+                    app:layout_constraintVertical_bias="0.37" />
+
+                <TextView
+                    android:id="@+id/txtUserName1"
+                    android:layout_width="@dimen/_150sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:textStyle="bold"
+                    android:text="Roshan Kumar Posakya"
+                    android:textColor="@color/light_black"
+                    android:textSize="@dimen/_12sdp"
+                    app:layout_constraintBottom_toTopOf="@+id/txtPosition1"
+                    app:layout_constraintStart_toStartOf="@+id/view"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/txtPosition1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Mobile Application Developer"
+                    android:textColor="#2f2f2f"
+                    android:textSize="@dimen/_9sdp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view"
+                    app:layout_constraintStart_toStartOf="@+id/view"
+                    app:layout_constraintTop_toTopOf="@+id/view"
+                    app:layout_constraintVertical_bias="0.212" />
+
+                <TextView
+                    android:textStyle="bold"
+                    android:id="@+id/txtCompanyName2"
+                    android:layout_width="@dimen/_97sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="center"
+                    android:text="EzVz Software Pvt. Ltd."
+                    android:textAlignment="center"
+                    android:textColor="@color/view_line"
+                    android:textSize="@dimen/_12sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/view"
+                    app:layout_constraintTop_toBottomOf="@+id/imgLogo1"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <ImageView
+                    android:id="@+id/imageView6"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/circle_img"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_location_on_black_24dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view"
+                    app:layout_constraintEnd_toStartOf="@+id/txtAddress3"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/view"
+                    app:layout_constraintVertical_bias="0.56" />
+
+                <ImageView
+                    android:id="@+id/imageView7"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/circle_img"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_local_phone_black_24dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view"
+                    app:layout_constraintEnd_toStartOf="@+id/txtPh3"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/view"
+                    app:layout_constraintVertical_bias="0.71000004" />
+
+                <ImageView
+                    android:id="@+id/imageView8"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/circle_img"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_vpn_lock_black_24dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view"
+                    app:layout_constraintEnd_toStartOf="@+id/txtWeb3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/view"
+                    app:layout_constraintVertical_bias="1.0" />
+
+                <ImageView
+                    android:id="@+id/imageView9"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/circle_img"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_email_black_24dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view"
+                    app:layout_constraintEnd_toStartOf="@+id/txtEmail3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/view"
+                    app:layout_constraintVertical_bias="0.82" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:visibility="gone"
+            android:id="@+id/curveView"
+            app:cardBackgroundColor="@color/colorPrimaryDark"
+            android:layout_margin="5dp"
+            app:cardElevation="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_180sdp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <View
+                    android:scaleType="centerCrop"
+                    android:id="@+id/view0"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/ic_hell6"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/txtAddress5"
+                    android:layout_width="@dimen/_120sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:fontFamily="sans-serif"
+                    android:lineSpacingExtra="2sp"
+                    android:text="NewRoad House No. 128, Kathmandu, Nepal"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_9sdp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view0"
+                    app:layout_constraintEnd_toEndOf="@+id/view0"
+                    app:layout_constraintHorizontal_bias="0.91"
+                    app:layout_constraintStart_toStartOf="@+id/view0"
+                    app:layout_constraintTop_toTopOf="@+id/view0"
+                    app:layout_constraintVertical_bias="0.69" />
+
+                <TextView
+                    android:id="@+id/txtPh5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="8dp"
+                    android:autoLink="phone"
+                    android:text="+9779860306332"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_9sdp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view0"
+                    app:layout_constraintEnd_toEndOf="@+id/txtAddress5"
+                    app:layout_constraintHorizontal_bias="0.533"
+                    app:layout_constraintStart_toStartOf="@+id/txtAddress5"
+                    app:layout_constraintTop_toBottomOf="@+id/txtAddress5"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <TextView
+                    android:id="@+id/txtEmail5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:autoLink="email"
+                    android:text="info@esewa.com"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_9sdp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view0"
+                    app:layout_constraintEnd_toEndOf="@+id/view0"
+                    app:layout_constraintHorizontal_bias="0.052"
+                    app:layout_constraintStart_toStartOf="@+id/view0"
+                    app:layout_constraintTop_toBottomOf="@+id/txtWeb5"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <TextView
+                    android:id="@+id/txtWeb5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="35dp"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginTop="8dp"
+                    android:autoLink="web"
+                    android:text="www.halfwiter.com"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_9sdp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view0"
+                    app:layout_constraintStart_toStartOf="@+id/view0"
+                    app:layout_constraintTop_toTopOf="@+id/view0"
+                    app:layout_constraintVertical_bias="0.647" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imgLogo3"
+                    android:layout_width="@dimen/_45sdp"
+                    android:layout_height="@dimen/_45sdp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:src="@drawable/ezvz"
+                    app:civ_border_color="#dedede"
+                    app:civ_border_width="1dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view0"
+                    app:layout_constraintEnd_toEndOf="@+id/view0"
+                    app:layout_constraintHorizontal_bias="0.08"
+                    app:layout_constraintStart_toStartOf="@+id/view0"
+                    app:layout_constraintTop_toTopOf="@+id/view0"
+                    app:layout_constraintVertical_bias="0.025" />
+
+                <TextView
+                    android:id="@+id/txtUserName3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:text="Roshan Bahadur  Posakya"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@+id/view0"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/txtPosition3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Mobile Application Developer"
+                    android:textColor="@color/view_line"
+                    android:textSize="@dimen/_9sdp"
+                    app:layout_constraintEnd_toEndOf="@+id/txtUserName3"
+                    app:layout_constraintTop_toBottomOf="@+id/txtUserName3" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+
+            app:cardBackgroundColor="@color/colorPrimaryDark"
+            android:layout_margin="5dp"
+            app:cardElevation="4dp"
+            android:id="@+id/halfCurveView"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_180sdp">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:id="@+id/view23"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/ic_hell10"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <TextView
+                    android:id="@+id/txtAddress4"
+                    android:layout_width="@dimen/_150sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:fontFamily="sans-serif"
+                    android:gravity="end"
+                    android:lineSpacingExtra="2sp"
+                    android:text="NewRoad House No. 128, Kathmandu, Nepal"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_9sdp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view23"
+                    app:layout_constraintEnd_toEndOf="@+id/view23"
+                    app:layout_constraintHorizontal_bias="0.926"
+                    app:layout_constraintStart_toStartOf="@+id/view23"
+                    app:layout_constraintTop_toTopOf="@+id/view23"
+                    app:layout_constraintVertical_bias="0.519" />
+
+                <TextView
+                    android:id="@+id/txtPh4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:autoLink="phone"
+                    android:text="+9779860306332"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_9sdp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view23"
+                    app:layout_constraintEnd_toEndOf="@+id/view23"
+                    app:layout_constraintHorizontal_bias="0.945"
+                    app:layout_constraintStart_toStartOf="@+id/view23"
+                    app:layout_constraintTop_toTopOf="@+id/view23"
+                    app:layout_constraintVertical_bias="0.876" />
+
+                <TextView
+                    android:id="@+id/txtEmail4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:autoLink="email"
+                    android:text="kingsantoshkumaryadav@gmail.com"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_9sdp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view23"
+                    app:layout_constraintEnd_toEndOf="@+id/view23"
+                    app:layout_constraintHorizontal_bias="0.963"
+                    app:layout_constraintStart_toStartOf="@+id/view23"
+                    app:layout_constraintTop_toTopOf="@+id/view23"
+                    app:layout_constraintVertical_bias="0.62" />
+
+                <TextView
+                    android:id="@+id/txtWeb4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:autoLink="web"
+                    android:text="www.halfwiter.com"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_9sdp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view23"
+                    app:layout_constraintEnd_toEndOf="@+id/view23"
+                    app:layout_constraintHorizontal_bias="0.97"
+                    app:layout_constraintStart_toStartOf="@+id/view23"
+                    app:layout_constraintTop_toTopOf="@+id/view23"
+                    app:layout_constraintVertical_bias="0.723" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imgLogo2"
+                    android:layout_width="@dimen/_60sdp"
+                    android:layout_height="@dimen/_60sdp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:src="@drawable/ezvz"
+                    app:layout_constraintBottom_toTopOf="@+id/txtCompanyName3"
+                    app:layout_constraintEnd_toEndOf="@+id/txtCompanyName3"
+                    app:layout_constraintStart_toStartOf="@+id/txtCompanyName3"
+                    app:layout_constraintTop_toTopOf="@+id/view23" />
+
+                <TextView
+                    android:id="@+id/txtUserName2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="172dp"
+                    android:layout_marginLeft="172dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Roshan Posakya"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/txtPosition2"
+                    app:layout_constraintStart_toStartOf="@+id/imgLogo2"
+                    app:layout_constraintTop_toTopOf="@+id/view23"
+                    app:layout_constraintVertical_bias="1.0" />
+
+                <TextView
+                    android:id="@+id/txtPosition2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="216dp"
+                    android:layout_marginLeft="216dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@color/white"
+                    android:paddingRight="5dp"
+                    android:text="Mobile Developer"
+                    android:textColor="@color/light_black"
+                    android:textSize="@dimen/_9sdp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view23"
+                    app:layout_constraintStart_toStartOf="@+id/view23"
+                    app:layout_constraintTop_toTopOf="@+id/view23"
+                    app:layout_constraintVertical_bias="0.288" />
+
+                <TextView
+                    android:textSize="@dimen/_12sdp"
+                    android:id="@+id/txtCompanyName3"
+                    android:layout_width="@dimen/_118sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="8dp"
+                    android:text="K and K tech private limited "
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/view23"
+                    app:layout_constraintStart_toStartOf="@+id/view23"
+                    app:layout_constraintTop_toTopOf="@+id/view23"
+                    app:layout_constraintVertical_bias="0.476" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:visibility="gone"
+            android:id="@+id/UpDownView"
+            app:cardBackgroundColor="@color/colorPrimaryDark"
+            android:layout_margin="5dp"
+            app:cardElevation="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_180sdp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:id="@+id/view01"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/ic_hell5"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.0" />
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="@dimen/_125sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginBottom="8dp"
+                    android:fontFamily="sans-serif"
+                    android:lineSpacingExtra="2sp"
+                    android:text="NewRoad House No. 128, Kathmandu, Nepal"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_9sdp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view01"
+                    app:layout_constraintEnd_toEndOf="@+id/view01"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/view01"
+                    app:layout_constraintTop_toTopOf="@+id/view01"
+                    app:layout_constraintVertical_bias="0.39" />
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginBottom="8dp"
+                    android:autoLink="phone"
+                    android:text="+9779860306332"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_9sdp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view01"
+                    app:layout_constraintEnd_toEndOf="@+id/view01"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/view01"
+                    app:layout_constraintTop_toTopOf="@+id/view01"
+                    app:layout_constraintVertical_bias="0.545" />
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:autoLink="email"
+                    android:text="roshanposakya07@gmail.com"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_9sdp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view01"
+                    app:layout_constraintEnd_toEndOf="@+id/view01"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/view01"
+                    app:layout_constraintTop_toTopOf="@+id/view01"
+                    app:layout_constraintVertical_bias="0.825" />
+
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginTop="8dp"
+                    android:autoLink="web"
+                    android:text="www.halfwiter.com"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_9sdp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view01"
+                    app:layout_constraintStart_toStartOf="@+id/view01"
+                    app:layout_constraintTop_toTopOf="@+id/view01"
+                    app:layout_constraintVertical_bias="0.67" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    app:civ_border_color="#dedede"
+                    app:civ_border_width="1dp"
+                    android:id="@+id/imageView4"
+                    android:layout_width="@dimen/_45sdp"
+                    android:layout_height="@dimen/_45sdp"
+                    android:layout_marginBottom="8dp"
+                    android:src="@drawable/halfwaiter"
+                    app:layout_constraintBottom_toTopOf="@+id/textView18"
+                    app:layout_constraintEnd_toEndOf="@+id/textView18"
+                    app:layout_constraintHorizontal_bias="0.504"
+                    app:layout_constraintStart_toStartOf="@+id/textView18"
+                    app:layout_constraintTop_toTopOf="@+id/view01"
+                    app:layout_constraintVertical_bias="1.0" />
+
+                <TextView
+                    android:id="@+id/textView11"
+                    android:layout_width="@dimen/_170sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="end"
+                    android:text="Roshan bahadur posakya"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/view01"
+                    app:layout_constraintTop_toTopOf="@+id/view01"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <TextView
+                    android:id="@+id/textView13"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Mobile Application Developer"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_9sdp"
+                    android:textAlignment="center"
+                    app:layout_constraintBottom_toBottomOf="@+id/view01"
+                    app:layout_constraintEnd_toEndOf="@+id/view01"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="@+id/view01"
+                    app:layout_constraintTop_toTopOf="@+id/view01"
+                    app:layout_constraintVertical_bias="0.99" />
+
+                <ImageView
+                    android:id="@+id/imageView11"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/circle_img"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_location_on_black_24dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view01"
+                    app:layout_constraintEnd_toStartOf="@+id/textView7"
+                    app:layout_constraintStart_toStartOf="@+id/view01"
+                    app:layout_constraintTop_toTopOf="@+id/view01"
+                    app:layout_constraintVertical_bias="0.39" />
+
+                <ImageView
+                    android:id="@+id/imageView12"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/circle_img"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_local_phone_black_24dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view01"
+                    app:layout_constraintEnd_toStartOf="@+id/textView8"
+                    app:layout_constraintStart_toStartOf="@+id/view01"
+                    app:layout_constraintTop_toTopOf="@+id/view01"
+                    app:layout_constraintVertical_bias="0.55" />
+
+                <ImageView
+                    android:id="@+id/imageView13"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/circle_img"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_vpn_lock_black_24dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/textView10"
+                    app:layout_constraintStart_toStartOf="@+id/imageView12"
+                    app:layout_constraintTop_toTopOf="@+id/view01"
+                    app:layout_constraintVertical_bias="0.71000004" />
+
+                <ImageView
+                    android:padding="5dp"
+                    android:id="@+id/imageView14"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view01"
+                    app:layout_constraintEnd_toStartOf="@+id/textView9"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/view01"
+                    app:layout_constraintVertical_bias="0.88"
+                    android:src="@drawable/ic_email_black_24dp"
+                    android:background="@drawable/circle_img" />
+
+                <TextView
+                    android:id="@+id/textView18"
+                    android:layout_width="@dimen/_140sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginRight="4dp"
+                    android:text="Half Waiter Software Pvt. Ltd."
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/view01"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/view01"
+                    app:layout_constraintVertical_bias="0.63" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/colorAccent"
+            android:id="@+id/rightView"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_180sdp"
+            android:layout_margin="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_180sdp">
 
                 <View
                     android:id="@+id/view2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/triangle"
+                    android:background="@drawable/ic_hell3"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -52,8 +1087,8 @@
                     android:maxLines="2"
                     android:text="Santosh Sahani"
                     android:textColor="#fff"
-                    android:textSize="@dimen/_14sdp"
-                    android:textStyle="bold|italic"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -75,33 +1110,32 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView"
                     app:layout_constraintVertical_bias="0.0" />
 
-                <ImageView
-                    android:layout_marginTop="5dp"
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/imageView"
-                    android:layout_width="@dimen/_115sdp"
+                    android:layout_width="@dimen/_45sdp"
                     android:layout_height="@dimen/_45sdp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginBottom="100dp"
-                    android:src="@drawable/sara_icon"
+                    app:civ_border_width="1dp"
+                    app:civ_border_color="#dedede"
+                    android:src="@drawable/ezvz"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/textView19"
+                    app:layout_constraintStart_toStartOf="@+id/textView19"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintVertical_bias="0.033" />
 
                 <RelativeLayout
                     android:id="@+id/locRel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_marginBottom="8dp"
                     app:layout_constraintBottom_toTopOf="@+id/emailRel"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView"
-                    app:layout_constraintVertical_bias="0.41000003">
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.77">
 
                     <ImageView
                         android:id="@+id/locImg"
@@ -113,13 +1147,14 @@
 
                     <TextView
                         android:id="@+id/txtAddress"
-                        android:layout_width="wrap_content"
+                        android:layout_width="@dimen/_135sdp"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:layout_marginLeft="7dp"
                         android:layout_toRightOf="@+id/locImg"
-                        android:text="Ba,"
-                        android:textSize="@dimen/_8sdp" />
+                        android:lineSpacingExtra="2sp"
+                        android:text="NewRoad House No. 128, Kathmandu, Nepal"
+                        android:textSize="@dimen/_9sdp" />
 
 
                 </RelativeLayout>
@@ -129,8 +1164,8 @@
                     android:id="@+id/phRel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="8dp"
                     app:layout_constraintBottom_toTopOf="@+id/emailRel"
@@ -155,7 +1190,7 @@
                         android:autoLink="phone"
                         android:text="+977-9860306332"
                         android:textColor="#000"
-                        android:textSize="@dimen/_8sdp" />
+                        android:textSize="@dimen/_9sdp" />
 
 
                 </RelativeLayout>
@@ -164,8 +1199,8 @@
                     android:id="@+id/emailRel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="8dp"
                     app:layout_constraintBottom_toTopOf="@+id/webRel"
@@ -199,10 +1234,9 @@
                     android:id="@+id/webRel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/emailRel">
 
@@ -229,230 +1263,31 @@
 
                 </RelativeLayout>
 
-            </android.support.constraint.ConstraintLayout>
-
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:visibility="gone"
-            app:cardBackgroundColor="@color/colorAccent"
-            android:id="@+id/halfView"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_180sdp"
-            app:cardCornerRadius="4dp"
-            app:cardUseCompatPadding="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <android.support.constraint.ConstraintLayout
-
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-
-                <View
-                    android:id="@+id/view12"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/reverse_triangle"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
-
                 <TextView
-                    android:id="@+id/textView1"
-                    android:layout_width="185dp"
+                    android:id="@+id/textView19"
+                    android:layout_width="@dimen/_130sdp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="4dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
-                    android:ellipsize="end"
-                    android:gravity="end"
-                    android:lineSpacingExtra="2sp"
-                    android:maxLines="2"
-                    android:text="Santosh Kumar Sahani "
-                    android:textColor="#fff"
-                    android:textSize="@dimen/_14sdp"
-                    android:textStyle="bold|italic"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.134" />
-
-                <TextView
-                    android:id="@+id/textView12"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Chief Executive Officer"
-                    android:textColor="#FFF"
-                    android:textSize="@dimen/_9sdp"
-                    app:layout_constraintBottom_toTopOf="@+id/textView1"
-                    app:layout_constraintEnd_toEndOf="@+id/textView1"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="@+id/textView1" />
-
-                <ImageView
-                    android:id="@+id/imageView1"
-                    android:layout_width="@dimen/_115sdp"
-                    android:layout_height="@dimen/_45sdp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginBottom="100dp"
-                    android:src="@drawable/sara_icon"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginBottom="8dp"
+                    android:text="Half Waiter Software Pvt. Ltd."
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/view2"
+                    app:layout_constraintEnd_toEndOf="@+id/view2"
+                    app:layout_constraintHorizontal_bias="0.07"
+                    app:layout_constraintStart_toStartOf="@+id/view2"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView"
                     app:layout_constraintVertical_bias="0.0" />
 
-                <RelativeLayout
-                    android:id="@+id/locRel1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginBottom="8dp"
-                    app:layout_constraintBottom_toTopOf="@+id/emailRel1"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView1"
-                    app:layout_constraintVertical_bias="0.41000003">
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <ImageView
-                        android:id="@+id/locImg1"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:background="@drawable/circle_img"
-                        android:padding="5dp"
-                        android:src="@drawable/ic_location_on_black_24dp" />
+        </androidx.cardview.widget.CardView>
 
-                    <TextView
-                        android:id="@+id/txtAddress1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_marginLeft="7dp"
-                        android:layout_toRightOf="@+id/locImg1"
-                        android:text="Ba, Kathmandu"
-                        android:textSize="@dimen/_8sdp" />
-
-
-                </RelativeLayout>
-
-
-                <RelativeLayout
-                    android:id="@+id/phRel1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="8dp"
-                    app:layout_constraintBottom_toTopOf="@+id/emailRel1"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/locRel1">
-
-                    <ImageView
-                        android:id="@+id/phImg1"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:background="@drawable/circle_img"
-                        android:padding="5dp"
-                        android:src="@drawable/ic_local_phone_black_24dp" />
-
-                    <TextView
-                        android:id="@+id/txtPh1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_marginLeft="7dp"
-                        android:layout_toRightOf="@+id/phImg1"
-                        android:autoLink="phone"
-                        android:text="+977-9860306332"
-                        android:textColor="#000"
-                        android:textSize="@dimen/_8sdp" />
-
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/emailRel1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginBottom="8dp"
-                    app:layout_constraintBottom_toTopOf="@+id/webRel1"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/phRel1">
-
-                    <ImageView
-                        android:id="@+id/emailImg1"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:background="@drawable/circle_img"
-                        android:padding="5dp"
-                        android:src="@drawable/ic_email_black_24dp" />
-
-                    <TextView
-                        android:id="@+id/txtEmail1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_marginLeft="7dp"
-                        android:layout_toRightOf="@+id/emailImg1"
-                        android:autoLink="email"
-                        android:text="rajasantoshkumargupta@gmail.com"
-                        android:textColor="#000"
-                        android:textSize="@dimen/_8sdp" />
-
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/webRel1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/emailRel1">
-
-                    <ImageView
-                        android:id="@+id/webImg1"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:background="@drawable/circle_img"
-                        android:padding="5dp"
-                        android:src="@drawable/ic_vpn_lock_black_24dp" />
-
-                    <TextView
-                        android:id="@+id/txtWeb1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_marginLeft="7dp"
-                        android:layout_toRightOf="@+id/webImg1"
-                        android:autoLink="web"
-                        android:text="Halfwaiter.com"
-                        android:textColor="#000"
-                        android:textSize="@dimen/_8sdp" />
-
-
-                </RelativeLayout>
-
-            </android.support.constraint.ConstraintLayout>
-
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:visibility="gone"
             app:cardBackgroundColor="@color/colorAccent"
             android:id="@+id/semiView"
@@ -460,17 +1295,17 @@
             android:layout_height="@dimen/_180sdp"
             android:layout_marginTop="10dp"
             android:background="#fff"
-            app:cardUseCompatPadding="true">
+            android:layout_margin="5dp">
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/curve_rectangle" />
+                android:background="@drawable/ic_hell4" />
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
 
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_180sdp">
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/textView5"
@@ -484,8 +1319,8 @@
                     android:lineSpacingExtra="2sp"
                     android:text="Jayandra Raj Shahi"
                     android:textColor="#fff"
-                    android:textSize="@dimen/_14sdp"
-                    android:textStyle="bold|italic"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.034"
@@ -493,16 +1328,19 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0" />
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
+                    app:civ_border_width="1dp"
+                    app:civ_border_color="#dedede"
                     android:id="@+id/imageView3"
-                    android:layout_width="@dimen/_115sdp"
-                    android:layout_height="@dimen/_45sdp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="18dp"
-                    android:src="@drawable/sara_icon"
+                    android:layout_width="@dimen/_60sdp"
+                    android:layout_height="@dimen/_60sdp"
+                    android:layout_marginBottom="28dp"
+                    android:src="@drawable/halfwaiter"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toEndOf="@+id/textView17"
+                    app:layout_constraintStart_toStartOf="@+id/textView17"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.64" />
 
                 <TextView
                     android:id="@+id/textView6"
@@ -532,7 +1370,7 @@
                     android:layout_marginTop="40dp"
                     app:layout_constraintLeft_toLeftOf="@+id/emailRel2"
                     app:layout_constraintTop_toBottomOf="@+id/textView5"
-                    tools:layout_editor_absoluteX="103dp"
+                    tools:layout_editor_absoluteX="105dp"
                     android:layout_marginLeft="45dp">
 
                     <ImageView
@@ -545,16 +1383,16 @@
 
                     <TextView
                         android:id="@+id/txtAddress2"
-                        android:layout_width="wrap_content"
+                        android:layout_width="@dimen/_125sdp"
+                        android:lineSpacingExtra="2sp"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_marginLeft="7dp"
                         android:layout_toRightOf="@+id/locImg2"
-                        android:gravity="center"
                         android:paddingTop="3dp"
-                        android:text="gg"
+                        android:text="NewRoad House No. 128, Kathmandu, Nepal"
                         android:textColor="@color/colorAccent"
-                        android:textSize="@dimen/_8sdp" />
+                        android:textSize="@dimen/_9sdp" />
 
 
                 </RelativeLayout>
@@ -588,7 +1426,7 @@
                         android:autoLink="phone"
                         android:text="+977-9860306332"
                         android:textColor="#000"
-                        android:textSize="@dimen/_8sdp" />
+                        android:textSize="@dimen/_9sdp" />
 
 
                 </RelativeLayout>
@@ -625,7 +1463,7 @@
                         android:autoLink="email"
                         android:text="gmail.com"
                         android:textColor="#000"
-                        android:textSize="@dimen/_8sdp" />
+                        android:textSize="@dimen/_9sdp" />
 
 
                 </RelativeLayout>
@@ -659,16 +1497,33 @@
                         android:autoLink="web"
                         android:text="Halfwaiter.com"
                         android:textColor="#000"
-                        android:textSize="@dimen/_8sdp" />
+                        android:textSize="@dimen/_9sdp" />
 
 
                 </RelativeLayout>
 
-            </android.support.constraint.ConstraintLayout>
+                <TextView
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/_12sdp"
+                    android:id="@+id/textView17"
+                    android:layout_width="@dimen/_120sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="K and k tech Pvt. Ltd."
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView3"
+                    app:layout_constraintVertical_bias="0.0" />
 
-        </android.support.v7.widget.CardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+
 </RelativeLayout>
 
 
