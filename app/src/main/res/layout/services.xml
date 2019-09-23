@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <EditText
+        android:inputType="textAutoComplete"
+        android:textColorHint="@color/black_overlay"
+        android:textColor="@color/black"
+        app:backgroundTint="@color/black"
+        android:id="@+id/editService1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Service 1"/>
+
+    <EditText
+        android:inputType="textAutoComplete"
+        android:textColorHint="@color/black_overlay"
+        android:textColor="@color/black"
+        app:backgroundTint="@color/black"
+        android:id="@+id/editService2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Service 2"/>
+
+    <EditText
+        android:inputType="textAutoComplete"
+        android:textColorHint="@color/black_overlay"
+        android:textColor="@color/black"
+        app:backgroundTint="@color/black"
+        android:id="@+id/editService3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Service 3"/>
+
+    <EditText
+        android:inputType="textAutoComplete"
+        android:textColorHint="@color/black_overlay"
+        android:textColor="@color/black"
+        app:backgroundTint="@color/black"
+        android:id="@+id/editService4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Service 4"/>
+
+    <EditText
+        android:inputType="textAutoComplete"
+        android:textColorHint="@color/black_overlay"
+        android:textColor="@color/black"
+        app:backgroundTint="@color/black"
+        android:id="@+id/editService5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Service 5"/>
+
+    <EditText
+        android:inputType="textAutoComplete"
+        android:textColorHint="@color/black_overlay"
+        android:textColor="@color/black"
+        app:backgroundTint="@color/black"
+        android:id="@+id/editService6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Service 6"/>
+
+    <Button
+        android:id="@+id/btnSaveServices"
+        android:layout_margin="10dp"
+        android:textColor="@color/white"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/btn_bck"
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:text="save"/>
+
+</LinearLayout>

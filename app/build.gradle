@@ -52,4 +52,5 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation files('libs/eSewaSdk.aar')
     implementation 'com.paypal.sdk:paypal-android-sdk:2.16.0'
+    implementation 'com.wajahatkarim3.EasyFlipView:EasyFlipView:2.1.2'
 }

@@ -1,29 +1,27 @@
-package com.kandktech.ezivizi.model_class;
+package com.kandktech.ezivizi.model_class.qr_services_detail;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class UserModelClass {
+public class QRServicesModelClass {
 
     @SerializedName("data")
     @Expose
-    private List<User_detail> data;
+    private List<Data> data;
 
-    public List<User_detail> getData() {
+    public List<Data> getData() {
         return data;
     }
 
-    public void setData(List<User_detail> data) {
+    public void setData(List<Data> data) {
         this.data = data;
     }
 
     private String message;
 
     private String status;
-
-
 
     public String getMessage ()
     {

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.Settings;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +39,8 @@ public class WelcomeScreenActivity extends AppCompatActivity {
 
 
         deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        getColorCode(-65536);
 
 
         AnimationClass.Startanimation(4000);
@@ -80,6 +83,11 @@ public class WelcomeScreenActivity extends AppCompatActivity {
         );
 
 
+    }
+
+    public void getColorCode(int intColor){
+        String hexColor = String.format("#%06X", (0xFFFFFFFF & intColor));
+        System.out.println("HexCor : "+hexColor);
     }
 
 

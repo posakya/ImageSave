@@ -11,10 +11,13 @@ import com.google.android.material.tabs.TabLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.kandktech.ezivizi.adapter.TabAdapter;
 
@@ -23,7 +26,7 @@ public class FirstPageActivity extends AppCompatActivity {
     Toolbar toolbar;
     ViewPager viewPager;
     TabLayout tabLayout;
-
+    boolean doubleBackToExitPressedOnce = false;
     TabAdapter tabAdapter;
     public static boolean qrScan = false;
     SharedPreferences sharedPreferences;
@@ -130,4 +133,31 @@ public class FirstPageActivity extends AppCompatActivity {
 
 
     }
+
+    @Override
+    public void onBackPressed() {
+
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
+        } else if (!doubleBackToExitPressedOnce) {
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "Touch again to exit", Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+
+                    doubleBackToExitPressedOnce = false;
+
+
+                }
+            }, 2000);
+        } else {
+            super.onBackPressed();
+            finishAffinity();
+            return;
+        }
+    }
+
 }

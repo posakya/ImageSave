@@ -1,26 +1,26 @@
 package com.kandktech.ezivizi.model_class;
 
+import java.util.List;
 
-
-public class SavedUserDetailModelClass {
-    String name;
-    String email;
-    String phone;
-    String web;
-    String address;
-    String position;
-    String device_id;
-    String user_logo;
-    String colorCode;
-    String used_layout;
-    String company;
-    String faxNo;
-    String poBoxNo;
-
+public class SaveCorporateDetailModelClass {
+    public String name;
+    public String email;
+    public String phone;
+    public String web;
+    public String address;
+    public String position;
+    public String device_id;
+    public String user_logo;
+    public String colorCode;
+    public String used_layout;
+    public String company;
+    public String faxNo;
+    public String poBoxNo;
+    public List<ServicesModelClass> servicesModelClassList;
 
     @Override
     public String toString() {
-        return "SavedUserDetailModelClass{" +
+        return "SaveCorporateDetailModelClass{" +
                 "name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
@@ -34,7 +34,16 @@ public class SavedUserDetailModelClass {
                 ", company='" + company + '\'' +
                 ", faxNo='" + faxNo + '\'' +
                 ", poBoxNo='" + poBoxNo + '\'' +
+                ", servicesModelClassList=" + servicesModelClassList +
                 '}';
+    }
+
+    public List<ServicesModelClass> getServicesModelClassList() {
+        return servicesModelClassList;
+    }
+
+    public void setServicesModelClassList(List<ServicesModelClass> servicesModelClassList) {
+        this.servicesModelClassList = servicesModelClassList;
     }
 
     public String getName() {
@@ -140,15 +149,5 @@ public class SavedUserDetailModelClass {
     public void setPoBoxNo(String poBoxNo) {
         this.poBoxNo = poBoxNo;
     }
-
-    public SavedUserDetailModelClass() {
-
-        /*
-            empty constructor
-         */
-
-    }
-
-
 
 }

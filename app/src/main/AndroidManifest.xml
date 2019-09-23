@@ -16,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".corporate.CorporateList"></activity>
+        <activity android:name=".corporate.IndividualActivity"></activity>
+        <activity android:name=".corporate.CorporateList" />
         <activity android:name=".authentication.CorporateQRGenerate" />
         <activity android:name=".corporate.CorporateActivity" />
         <activity android:name=".authentication.LoginActivity" />

@@ -34,6 +34,8 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.kandktech.ezivizi.authentication.SharedPreferenceClass;
+
+import com.kandktech.ezivizi.corporate.IndividualActivity;
 import com.kandktech.ezivizi.image_saver.ImageSaver;
 import com.kandktech.ezivizi.progressDialog.ShowProgress;
 import com.kandktech.ezivizi.retrofit_api_client.RetrofitClient;
@@ -45,7 +47,7 @@ import com.paypal.android.sdk.payments.PayPalService;
 import com.paypal.android.sdk.payments.PaymentActivity;
 import com.paypal.android.sdk.payments.PaymentConfirmation;
 import com.scottyab.aescrypt.AESCrypt;
-import com.squareup.picasso.Picasso;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -264,12 +266,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getIconColor(colorCode);
         getViewColor(colorCode);
 
+        source1 = Uri.parse(getIntent().getExtras().getString("image"));
+        System.out.println("Bitmap path = " + source1.getPath());
+        Image image = new Image();
+        image.execute();
+
         btnDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 if (usedLayout.equals("0")) {
                     Toast.makeText(MainActivity.this, "Please Select View!!", Toast.LENGTH_SHORT).show();
+                }else if(getIntent().getExtras().getString("exists").equals("yes")){
+
+                    saveData();
+
                 }else{
                     dialog = new Dialog(MainActivity.this, R.style.Dialog);
                     dialog.setContentView(R.layout.payment);
@@ -325,16 +336,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     dialog.show();
                 }
 
-
-
-
             }
         });
 
-        source1 = Uri.parse(getIntent().getExtras().getString("image"));
-        System.out.println("Bitmap path = " + source1.getPath());
-        Image image = new Image();
-        image.execute();
+
 
 
     }
@@ -617,7 +622,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 bm1.compress(Bitmap.CompressFormat.JPEG, 100, out);
 
-
                 String[] filePathColumn = {MediaStore.Images.Media.DATA};
                 Cursor cursor = getContentResolver().query(source1, filePathColumn, null, null, null);
                 cursor.moveToFirst();
@@ -652,6 +656,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             img6.setImageBitmap(bitmap);
 
         }
+    }
+
+    public void saveData(){
+        saveUserImage(getIntent().getExtras().getString("name"), getIntent().getExtras().getString("address"), getIntent().getExtras().getString("phone"), getIntent().getExtras().getString("weblink"), getIntent().getExtras().getString("email"), getIntent().getExtras().getString("position"), sharedPreferenceClass.getUid(), getColorCode(Integer.parseInt(getIntent().getExtras().getString("color_code"))).replace("#",""), getColorCode(Integer.parseInt(getIntent().getExtras().getString("color_code"))).replace("#",""), usedLayout, "0", "0", getIntent().getExtras().getString("company"), "1", file);
+
     }
 
     public void generateQrCode(String userName, String address, String email, String phone, String website, String position, String filename1, String ColorCode, String usedLayout, String company, String fax_no, String po_box_no, String colorCodeSecond, String userId) {
@@ -714,7 +723,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         System.out.println("totlaAmount : "+totalAmount);
                         Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
 
-                        saveUserImage(getIntent().getExtras().getString("name"), getIntent().getExtras().getString("address"), getIntent().getExtras().getString("phone"), getIntent().getExtras().getString("weblink"), getIntent().getExtras().getString("email"), getIntent().getExtras().getString("position"), sharedPreferenceClass.getUid(), getIntent().getExtras().getString("color_code"), getIntent().getExtras().getString("color_code"), usedLayout, "0", "0", getIntent().getExtras().getString("company"), "1", file);
+                        saveUserImage(getIntent().getExtras().getString("name"), getIntent().getExtras().getString("address"), getIntent().getExtras().getString("phone"), getIntent().getExtras().getString("weblink"), getIntent().getExtras().getString("email"), getIntent().getExtras().getString("position"), sharedPreferenceClass.getUid(),getColorCode(Integer.parseInt(getIntent().getExtras().getString("color_code"))).replace("#",""),getColorCode(Integer.parseInt(getIntent().getExtras().getString("color_code"))).replace("#",""), usedLayout, "0", "0", getIntent().getExtras().getString("company"), "1", file);
 
 
                     } catch (JSONException e) {
@@ -736,7 +745,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     String state=confirmation.getProofOfPayment().getState();
 
                     if (state.equals("approved")){
-                        saveUserImage(getIntent().getExtras().getString("name"), getIntent().getExtras().getString("address"), getIntent().getExtras().getString("phone"), getIntent().getExtras().getString("weblink"), getIntent().getExtras().getString("email"), getIntent().getExtras().getString("position"), sharedPreferenceClass.getUid(), getIntent().getExtras().getString("color_code"), getIntent().getExtras().getString("color_code"), usedLayout, "0", "0", getIntent().getExtras().getString("company"), "1", file);
+                        saveUserImage(getIntent().getExtras().getString("name"), getIntent().getExtras().getString("address"), getIntent().getExtras().getString("phone"), getIntent().getExtras().getString("weblink"), getIntent().getExtras().getString("email"), getIntent().getExtras().getString("position"), sharedPreferenceClass.getUid(), getColorCode(Integer.parseInt(getIntent().getExtras().getString("color_code"))).replace("#",""), getColorCode(Integer.parseInt(getIntent().getExtras().getString("color_code"))).replace("#",""), usedLayout, "0", "0", getIntent().getExtras().getString("company"), "1", file);
 
                         Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
                     }else {
@@ -756,7 +765,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         showProgress.showProgress();
 
-        System.out.println("Image : " + image.getName());
+//        System.out.println("Image : " + image.getName());
 
         ApiInterface imageInterface = RetrofitClient.getFormData().create(ApiInterface.class);
         RequestBody requestBody = new MultipartBody.Builder()
@@ -820,13 +829,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                                     if (bm != null) {
 
-
-
                                             dbHandler.deleteDataSingle(user_id);
-                                            dbHandler.insertData(getIntent().getExtras().getString("name"), getIntent().getExtras().getString("address"), getIntent().getExtras().getString("phone"), getIntent().getExtras().getString("weblink"), getIntent().getExtras().getString("email"), getIntent().getExtras().getString("position"), user_id, "/storage/emulated/0/Pictures/.ezvz/" + image.replaceAll(RetrofitClient.imageUrl, ""), getIntent().getExtras().getString("color_code"), usedLayout, getIntent().getExtras().getString("company"), getIntent().getExtras().getString("color_code"), fax_no, po_box_no);
+                                            dbHandler.insertData(getIntent().getExtras().getString("name"), getIntent().getExtras().getString("address"), getIntent().getExtras().getString("phone"), getIntent().getExtras().getString("weblink"), getIntent().getExtras().getString("email"), getIntent().getExtras().getString("position"), user_id, "/storage/emulated/0/Pictures/.ezvz/" + image.replaceAll(RetrofitClient.imageUrl, ""), getColorCode(Integer.parseInt(getIntent().getExtras().getString("color_code"))).replace("#",""), usedLayout, getIntent().getExtras().getString("company"), getColorCode(Integer.parseInt(getIntent().getExtras().getString("color_code"))).replace("#",""), fax_no, po_box_no);
                                             System.out.println("Inserted");
-                                            generateQrCode(getIntent().getExtras().getString("name"), getIntent().getExtras().getString("address"), getIntent().getExtras().getString("email"), getIntent().getExtras().getString("phone"), getIntent().getExtras().getString("weblink"), getIntent().getExtras().getString("position"), "/storage/emulated/0/Pictures/.ezvz/" + image.replaceAll(RetrofitClient.imageUrl, ""), getIntent().getExtras().getString("color_code"), usedLayout, getIntent().getExtras().getString("company"), fax_no, po_box_no, color_code_second, user_id);
-                                            startActivity(new Intent(getApplicationContext(), FirstPageActivity.class));
+                                            saveId(user_id,user_id);
+                                            generateQrCode(getIntent().getExtras().getString("name"), getIntent().getExtras().getString("address"), getIntent().getExtras().getString("email"), getIntent().getExtras().getString("phone"), getIntent().getExtras().getString("weblink"), getIntent().getExtras().getString("position"), "/storage/emulated/0/Pictures/.ezvz/" + image.replaceAll(RetrofitClient.imageUrl, ""), getColorCode(Integer.parseInt(getIntent().getExtras().getString("color_code"))).replace("#",""), usedLayout, getIntent().getExtras().getString("company"), fax_no, po_box_no, getColorCode(Integer.parseInt(getIntent().getExtras().getString("color_code"))).replace("#",""), user_id);
 
                                     }
 
@@ -865,6 +872,52 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    private void saveId(final String current_user_Id, final String saved_user_id){
+
+        ApiInterface saveInterface = RetrofitClient.getFormData().create(ApiInterface.class);
+
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("current_user_id",current_user_Id)
+                .addFormDataPart("saved_user_id",saved_user_id)
+                .build();
+
+        saveInterface.saveId(requestBody).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()){
+                    System.out.println("I am here2 !!!");
+                    try {
+                        JSONObject jsonObject = new JSONObject(response.body().string());
+                        String status = jsonObject.optString("status");
+
+                        if (status.equals("1")){
+                            startActivity(new Intent(getApplicationContext(), IndividualActivity.class));
+
+                            Toast.makeText(getApplicationContext(), "Saved Data Successfully", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(getApplicationContext(), "Failed to save", Toast.LENGTH_SHORT).show();
+                        }
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+
+        });
+
+    }
+
     public String randomAlphaNumeric(int count) {
         StringBuilder builder = new StringBuilder();
         while (count-- != 0) {
@@ -872,5 +925,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             builder.append(ALPHA_NUMERIC_STRING.charAt(character));
         }
         return builder.toString();
+    }
+
+    public String getColorCode(int intColor){
+        String hexColor = String.format("#%06X", (0xFFFFFFFF & intColor));
+        System.out.println("HexCor : "+hexColor);
+        return hexColor;
     }
 }

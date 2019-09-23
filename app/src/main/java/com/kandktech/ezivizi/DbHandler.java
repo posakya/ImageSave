@@ -25,6 +25,8 @@ public class DbHandler extends SQLiteOpenHelper {
      */
 
     public static final String table_name="qr_code_data";
+    public static final String table_services = "tbl_service";
+
     public static final String _id=" _id";
     public static final String user_name="user_name";
     public static final String user_address="user_address";
@@ -41,6 +43,15 @@ public class DbHandler extends SQLiteOpenHelper {
     public static final String fax_no = "fax_no";
     public static final String po_box_no = "po_box_no";
 
+    public static final String service_one = "service_one";
+    public static final String service_two = "service_two";
+    public static final String service_three = "service_three";
+    public static final String service_four = "service_four";
+    public static final String service_five = "service_five";
+    public static final String service_six = "service_six";
+
+
+
     /*
     creating database
      */
@@ -54,7 +65,10 @@ public class DbHandler extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
+
         db.execSQL("create table " + table_name + "( _id integer primary key autoincrement ,user_name text,user_address text,user_phone text,user_website text,user_email text,user_position text,user_device_id text,user_logo text,color_code text,used_layout text,company text,color_code_second text,fax_no text,po_box_no text)");
+        db.execSQL("create table " + table_services + "( _id integer primary key autoincrement ,user_device_id text, service_one text, service_two text, service_three text, service_four text, service_five text, service_six text)");
+
     }
 
     /*
@@ -63,6 +77,7 @@ public class DbHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("drop table if exists" + table_name);
+        db.execSQL("drop table if exists" + table_services);
 
         onCreate(db);
     }
@@ -99,6 +114,27 @@ public class DbHandler extends SQLiteOpenHelper {
     }
 
     /*
+    insert services
+     */
+
+    public void addService(String user_device_id1, String service_one1,String service_two1,String service_three1,String service_four1,String service_five1,String service_six1){
+        SQLiteDatabase db=this.getWritableDatabase();
+        ContentValues values=new ContentValues();
+        values.put(user_device_id,user_device_id1);
+        values.put(service_five,service_five1);
+        values.put(service_four,service_four1);
+        values.put(service_one,service_one1);
+        values.put(service_two,service_two1);
+        values.put(service_three,service_three1);
+        values.put(service_six,service_six1);
+
+        int u = db.update("tbl_service", values, "user_device_id=?", new String[]{user_device_id1});
+        if (u == 0) {
+            db.insertWithOnConflict("tbl_service", null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        }
+    }
+
+    /*
         retrieve data from qr_code_data table
      */
 
@@ -106,6 +142,51 @@ public class DbHandler extends SQLiteOpenHelper {
         SQLiteDatabase db=this.getWritableDatabase();
 
         Cursor cr =  db.rawQuery( "select _id as _id, user_name, color_code,  user_address,  user_phone,  user_website, user_email, user_position,  user_device_id, user_logo, used_layout, company, fax_no,color_code_second,po_box_no from qr_code_data ",null);
+
+        if (cr != null) {
+            cr.moveToFirst();
+        }
+        if (cr != null) {
+            cr.getCount();
+        }
+        return cr;
+
+    }
+
+//    public Cursor viewData(String userId1){
+//        SQLiteDatabase db=this.getWritableDatabase();
+//
+//        Cursor cr =  db.rawQuery( "select _id as _id, user_name, color_code,  user_address,  user_phone,  user_website, user_email, user_position,  user_device_id, user_logo, used_layout, company, fax_no,color_code_second,po_box_no from qr_code_data where user_device_id= '" + userId1 + "'",null);
+//
+//        if (cr != null) {
+//            cr.moveToFirst();
+//        }
+//        if (cr != null) {
+//            cr.getCount();
+//        }
+//        return cr;
+//
+//    }
+
+//    public Cursor viewServices(){
+//        SQLiteDatabase db=this.getWritableDatabase();
+//
+//        Cursor cr =  db.rawQuery( "select _id as _id, user_device_id, service_one,service_two,service_three,service_four,service_five,service_six from tbl_service ",null);
+//
+//        if (cr != null) {
+//            cr.moveToFirst();
+//        }
+//        if (cr != null) {
+//            cr.getCount();
+//        }
+//        return cr;
+//
+//    }
+
+    public Cursor viewServices(String user_device_id1){
+        SQLiteDatabase db=this.getWritableDatabase();
+
+        Cursor cr =  db.rawQuery( "select _id as _id, user_device_id, service_one,service_two,service_three,service_four,service_five,service_six from tbl_service where user_device_id= '" + user_device_id1 + "'",null);
 
         if (cr != null) {
             cr.moveToFirst();

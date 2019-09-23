@@ -25,12 +25,14 @@ import android.widget.Toast;
 
 import com.google.zxing.Result;
 import com.kandktech.ezivizi.DbHandler;
-import com.kandktech.ezivizi.FirstPageActivity;
 import com.kandktech.ezivizi.R;
 import com.kandktech.ezivizi.authentication.SharedPreferenceClass;
+import com.kandktech.ezivizi.corporate.CorporateList;
+import com.kandktech.ezivizi.corporate.IndividualActivity;
 import com.kandktech.ezivizi.image_saver.ImageSaver;
-import com.kandktech.ezivizi.model_class.UserModelClass;
-import com.kandktech.ezivizi.model_class.User_detail;
+import com.kandktech.ezivizi.model_class.user_model.UserModelClass;
+import com.kandktech.ezivizi.model_class.user_model.Data;
+import com.kandktech.ezivizi.model_class.service_model.ServiceModelClass;
 import com.kandktech.ezivizi.progressDialog.ShowProgress;
 import com.kandktech.ezivizi.retrofit_api_client.RetrofitClient;
 import com.kandktech.ezivizi.retrofit_api_interface.ApiInterface;
@@ -43,6 +45,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.URL;
 import java.security.GeneralSecurityException;
+import java.util.Arrays;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import okhttp3.MultipartBody;
@@ -63,7 +66,7 @@ public class QRScanFragment extends Fragment implements ZXingScannerView.ResultH
     String[] separated;
     ShowProgress showProgress;
     SharedPreferenceClass sharedPreferenceClass;
-    String image = null;
+    String image = "http://192.168.43.94:82/image/1566453815image_f77623cb-5440-43ed-9f18-3e1d36a606f920181128_211916.jpg";
 
 
 
@@ -145,15 +148,23 @@ public class QRScanFragment extends Fragment implements ZXingScannerView.ResultH
         }
         separated = decryptedMsg.split("EZVZ");
 
+
         System.out.println("Data : "+separated[8]);
+
+        System.out.println("Separated : "+ Arrays.toString(separated));
 
         /*
         userName + "EZVZ" + address + "EZVZ" + phone + "EZVZ" + email + "EZVZ" + website + "EZVZ" + filename1 + "EZVZ" + position + "EZVZ" + ColorCode + "EZVZ" + userId + "EZVZ" + usedLayout + "EZVZ" + company + "EZVZ" + fax_no + "EZVZ" + po_box_no + "EZVZ" + colorCodeSecond;
+[corporate, Mahalaxmi, Tikathali, Lalitpur, Nepal, 9863859745, Halfwaiter.system@gmail.com, www.halfwaiter.com, /storage/emulated/0/Pictures/.ezvz/1566354605IMG_20190704_191711_452.jpg, position, -14861313, 106448657719359170470, 5, Half Waiter Software Pvt. Ltd., 977-1-425637, 3269, -14861313]
 
          */
 
         getUserDetails(separated[8]);
 
+
+
+        getServices(separated[8]);
+        saveId(sharedPreferenceClass.getUid(),separated[8]);
         mScannerView.resumeCameraPreview(this);
 
 
@@ -230,8 +241,6 @@ public class QRScanFragment extends Fragment implements ZXingScannerView.ResultH
 
     private void getUserDetails(final String deviceId){
 
-        System.out.println("Image : "+image);
-
         try {
             if (showProgress == null){
 
@@ -251,15 +260,18 @@ public class QRScanFragment extends Fragment implements ZXingScannerView.ResultH
             public void onResponse(Call<UserModelClass> call, final Response<UserModelClass> response) {
                 if (response.isSuccessful()){
 
+
                     if (response.body() != null) {
 
-                        for (final User_detail userModelClass : response.body().getData()){
+                        if (response.body().getData().size() != 0){
+                            for (Data userModelClass : response.body().getData()){
 
-                           image = userModelClass.getImage();
-                            saveImage(userModelClass.getImage(),deviceId);
+                                saveImage(userModelClass.getImage(),deviceId);
 
-
+                            }
                         }
+
+
 
 
 
@@ -287,6 +299,7 @@ public class QRScanFragment extends Fragment implements ZXingScannerView.ResultH
 
 
     public void saveImage(final String image, final String deviceId){
+        System.out.println("I am here1 !!!");
         new Thread(new Runnable(){
             @Override
             public void run() {
@@ -310,11 +323,11 @@ public class QRScanFragment extends Fragment implements ZXingScannerView.ResultH
 
                     /*
                     (String user_name1, String user_address1, String user_phone1, String user_website1,String user_email1,String user_position1, String user_device_id1, String logo1,String color_code1,String used_layout1,String company1,String color_code_second1,String fax_no1,String po_box_no1){
-
                      */
 
-                    dbHandler.insertData(separated[0],separated[1],separated[2],separated[4],separated[3],separated[6],separated[8],"/storage/emulated/0/Pictures/.ezvz/"+image.replaceAll(RetrofitClient.imageUrl,""),separated[7],separated[9],separated[10],separated[11],separated[12],separated[13]);
-                    saveId(sharedPreferenceClass.getUid(),deviceId);
+                    dbHandler.insertData(separated[0],separated[1],separated[2],separated[4],separated[3],separated[6],separated[8],"/storage/emulated/0/Pictures/.ezvz/"+image.replaceAll(RetrofitClient.imageUrl,""),separated[7],separated[9],separated[10],separated[13],separated[11],separated[12]);
+
+
                     try {
                         if (showProgress != null){
                             showProgress.hideProgress();
@@ -323,15 +336,17 @@ public class QRScanFragment extends Fragment implements ZXingScannerView.ResultH
                         e.printStackTrace();
                     }
 
-                    Intent intent = new Intent(getActivity(), FirstPageActivity.class);
-                    startActivity(intent);
+
+
+
                 }
 
             }
+
         }).start();
     }
 
-    private void saveId(String current_user_Id, String saved_user_id){
+    private void saveId(String current_user_Id, final String saved_user_id){
 
         ApiInterface saveInterface = RetrofitClient.getFormData().create(ApiInterface.class);
 
@@ -345,12 +360,26 @@ public class QRScanFragment extends Fragment implements ZXingScannerView.ResultH
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()){
-
+                    System.out.println("I am here2 !!!");
                     try {
                         JSONObject jsonObject = new JSONObject(response.body().string());
                         String status = jsonObject.optString("status");
 
                         if (status.equals("1")){
+                            dbHandler.deleteDataSingle(separated[8]);
+
+                    /*
+                    (String user_name1, String user_address1, String user_phone1, String user_website1,String user_email1,String user_position1, String user_device_id1, String logo1,String color_code1,String used_layout1,String company1,String color_code_second1,String fax_no1,String po_box_no1){
+                     */
+
+
+                            if (separated[0].equals("corporate")){
+                                Intent intent = new Intent(getActivity(), CorporateList.class);
+                                startActivity(intent);
+                            }else{
+                                Intent intent = new Intent(getActivity(), IndividualActivity.class);
+                                startActivity(intent);
+                            }
                             Toast.makeText(getActivity(), "Save", Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
@@ -371,6 +400,41 @@ public class QRScanFragment extends Fragment implements ZXingScannerView.ResultH
             }
         });
 
+
+    }
+
+    private void getServices(String id){
+
+        ApiInterface serviceInterface = RetrofitClient.getFormData().create(ApiInterface.class);
+
+        Call<ServiceModelClass> classCall = serviceInterface.getSingleServices(id);
+        System.out.println("ID : "+id);
+
+        classCall.enqueue(new Callback<ServiceModelClass>() {
+            @Override
+            public void onResponse(Call<ServiceModelClass> call, Response<ServiceModelClass> response) {
+
+                if (response.isSuccessful()){
+
+                    System.out.println("Response : "+response.body().toString());
+                    if (response.body() != null){
+                        if (response.body().getData().size() != 0)
+                        {
+                            for (com.kandktech.ezivizi.model_class.service_model.Data data : response.body().getData()){
+                                System.out.println("I am here3 !!!");
+                                dbHandler.addService(data.getUser_id(),data.getService_1(),data.getService_2(),data.getService_3(),data.getService_4(),data.getService_5(),data.getService_6());
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ServiceModelClass> call, Throwable t) {
+
+            }
+        });
 
     }
 

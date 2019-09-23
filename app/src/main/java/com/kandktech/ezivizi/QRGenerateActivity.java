@@ -8,15 +8,20 @@ import android.graphics.BitmapFactory;
 
 import android.graphics.Color;
 
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 
 import android.provider.MediaStore;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,6 +37,7 @@ import com.kandktech.ezivizi.progressDialog.ShowProgress;
 import com.kandktech.ezivizi.retrofit_api_client.RetrofitClient;
 import com.kandktech.ezivizi.retrofit_api_interface.ApiInterface;
 import com.kandktech.ezivizi.welcome_screen.WelcomeScreenActivity;
+import com.squareup.picasso.Picasso;
 
 
 import org.json.JSONException;
@@ -70,7 +76,7 @@ public class QRGenerateActivity extends AppCompatActivity {
     Bitmap bm1;
     CircleImageView userImg;
     File file;
-
+    String alreadyExist = "no";
     ShowProgress showProgress;
     SharedPreferenceClass sharedPreferenceClass;
 
@@ -120,6 +126,39 @@ public class QRGenerateActivity extends AppCompatActivity {
 
         sharedPreferenceClass = new SharedPreferenceClass(getApplicationContext());
 
+//        try {
+//            Cursor cursor = dbHandler.viewData(sharedPreferenceClass.getUid());
+//            if (cursor != null){
+//
+//                txtAddress.setText(cursor.getString(cursor.getColumnIndex(DbHandler.user_address)));
+//                txtCompanyName.setText(cursor.getString(cursor.getColumnIndex(DbHandler.company)));
+//                txtEmail.setText(cursor.getString(cursor.getColumnIndex(DbHandler.user_email)));
+//                txtFullName.setText(cursor.getString(cursor.getColumnIndex(DbHandler.user_name)));
+//                txtPhone.setText(cursor.getString(cursor.getColumnIndex(DbHandler.user_phone)));
+//                txtPosition.setText(cursor.getString(cursor.getColumnIndex(DbHandler.user_position)));
+//                txtWebsite.setText(cursor.getString(cursor.getColumnIndex(DbHandler.user_website)));
+//
+//                Glide.with(getApplicationContext()).load(cursor.getString(cursor.getColumnIndex(DbHandler.user_logo))).into(userImg);
+//                alreadyExist = "yes";
+//
+//                file = new File(cursor.getString(cursor.getColumnIndex(DbHandler.user_logo)));
+//                colorCode = cursor.getString(cursor.getColumnIndex(DbHandler.color_code));
+//                button2.setBackgroundColor(Integer.parseInt(colorCode));
+//
+//                MediaScannerConnection.scanFile(this,
+//                        new String[] { file.getAbsolutePath() }, null,
+//                        new MediaScannerConnection.OnScanCompletedListener() {
+//                            public void onScanCompleted(String path, Uri uri) {
+//                                System.out.println("Source : "+uri.getPath());
+//                                source1 = uri;
+//                            }
+//                        });
+//
+//            }
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+
     }
 
     @Override
@@ -129,6 +168,8 @@ public class QRGenerateActivity extends AppCompatActivity {
             switch (requestCode){
                 case RQS_IMAGE1:
                     source1 = data.getData();
+
+                    System.out.println("Source2 : "+source1);
 
                     try {
 
@@ -144,6 +185,7 @@ public class QRGenerateActivity extends AppCompatActivity {
                         cursor.moveToFirst();
                         int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                         String filePath = cursor.getString(columnIndex);
+                        System.out.println("FilePath : "+filePath);
                         file = new Compressor(this).compressToFile(new File(filePath));
                         cursor.close();
 
@@ -245,56 +287,10 @@ public class QRGenerateActivity extends AppCompatActivity {
         i.putExtra("user_id",sharedPreferenceClass.getUid());
         i.putExtra("image", source1.toString());
         i.putExtra("company",company);
+        i.putExtra("exists",alreadyExist);
         startActivity(i);
 
-//        saveUserImage(name,address,phone,web,email,position,sharedPreferenceClass.getUid(),colorCode,colorCode,"1","1","1",company,"1",file);
-
     }
-
-//    public void saveUserImage(final String name, final String address, final String phone, String weblink, final String email, final String position, final String user_id, String color_code, String color_code_second, String layout, String fax_no, String po_box_no, String company_name, String paid_status, File image){
-//
-////        showProgress.showProgress();
-//
-//        System.out.println("Image : "+image.getName());
-//
-//        ApiInterface imageInterface = RetrofitClient.getFormData().create(ApiInterface.class);
-//        RequestBody requestBody = new MultipartBody.Builder()
-//                .setType(MultipartBody.FORM)
-//                .addFormDataPart("name",name)
-//                .addFormDataPart("address",address)
-//                .addFormDataPart("phone",phone)
-//                .addFormDataPart("email",email)
-//                .addFormDataPart("weblink",weblink)
-//                .addFormDataPart("position",position)
-//                .addFormDataPart("user_id",user_id)
-//                .addFormDataPart("layout",layout)
-//                .addFormDataPart("fax_no",fax_no)
-//                .addFormDataPart("color_code",color_code)
-//                .addFormDataPart("color_code_second",color_code_second)
-//                .addFormDataPart("po_box_no",po_box_no)
-//                .addFormDataPart("company_name",company_name)
-//                .addFormDataPart("paid_status",paid_status)
-//                .addFormDataPart("image", image.getName(), RequestBody.create(MediaType.parse("multipart/form-data"), image))
-//                .build();
-//
-//        imageInterface.saveQr(requestBody).enqueue(new Callback<ResponseBody>() {
-//            @Override
-//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                if (response.isSuccessful()){
-//                    Toast.makeText(QRGenerateActivity.this, "Success", Toast.LENGTH_SHORT).show();
-//                }else{
-//                    Toast.makeText(QRGenerateActivity.this, "Failed", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ResponseBody> call, Throwable t) {
-//
-//            }
-//        });
-//
-//
-//    }
 
 
 }

@@ -7,34 +7,81 @@
     tools:context=".fragments.ListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/listView"
+        android:background="#DEDEDE"
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginBottom="0dp"
-        android:divider="@color/transparent"
-        android:scrollbarThumbVertical="@color/transparent"></androidx.recyclerview.widget.RecyclerView>
+        android:layout_height="match_parent">
+    </androidx.recyclerview.widget.RecyclerView>
 
-    <!--<android.support.design.widget.FloatingActionButton-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:id="@+id/fab"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="bottom|end"-->
-        <!--android:layout_margin="@dimen/fab_margin"-->
-        <!--android:src="@drawable/ic_add_black_24dp"-->
-        <!--android:layout_alignParentEnd="true" />-->
+
+    <!--    <LinearLayout-->
+<!--        android:orientation="vertical"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent">-->
+
+<!--        <RelativeLayout-->
+<!--            android:foreground="@drawable/ripple_effect"-->
+<!--            android:id="@+id/individual"-->
+<!--            android:layout_margin="10dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content">-->
+
+
+
+<!--            <TextView-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textStyle="bold"-->
+<!--                android:fontFamily="@font/bilbo_swash_caps"-->
+<!--                android:textSize="@dimen/_40sdp"-->
+<!--                android:gravity="center"-->
+<!--                android:layout_centerInParent="true"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:text="Individual Card"/>-->
+
+<!--            <View-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:background="#80000000"/>-->
+
+<!--        </RelativeLayout>-->
+
+<!--        <RelativeLayout-->
+<!--            android:foreground="@drawable/ripple_effect"-->
+<!--            android:id="@+id/corporate"-->
+<!--            android:layout_marginRight="10dp"-->
+<!--            android:layout_marginLeft="10dp"-->
+<!--            android:layout_marginBottom="10dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content">-->
+
+
+<!--            <TextView-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textStyle="bold"-->
+<!--                android:fontFamily="@font/bilbo_swash_caps"-->
+<!--                android:textSize="@dimen/_40sdp"-->
+<!--                android:gravity="center"-->
+<!--                android:layout_centerInParent="true"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:text="Corporate Card"/>-->
+
+<!--            <View-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:background="#80000000"/>-->
+
+
+<!--        </RelativeLayout>-->
+
+<!--    </LinearLayout>-->
+
+
 
     <ru.dimorinny.floatingtextbutton.FloatingTextButton
         android:layout_margin="@dimen/fab_margin"
@@ -44,26 +91,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:floating_background_color="@color/colorAccent"
-        app:floating_left_icon="@drawable/ic_camera_alt_black_24dp"
-        app:floating_title="Generate QR Code"
+        app:floating_left_icon="@drawable/business_cards"
+        app:floating_title="Create Card"
         app:floating_title_color="@android:color/white"
-        />
+        android:layout_alignParentEnd="true" />
 
-    <!--<Button-->
-        <!--android:padding="15dp"-->
-        <!--android:drawablePadding="5dp"-->
-        <!--android:drawableLeft="@drawable/ic_camera_alt_black_24dp"-->
-        <!--android:textColor="@color/white"-->
-        <!--android:textAllCaps="false"-->
-        <!--android:text="Generate QR Code"-->
-        <!--android:layout_alignParentEnd="false"-->
-        <!--android:layout_alignParentRight="false"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_margin="@dimen/fab_margin"-->
-        <!--android:id="@+id/action_button"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="45dp"-->
-        <!--android:background="@drawable/floating_button"-->
-        <!--/>-->
+
 
 </RelativeLayout>

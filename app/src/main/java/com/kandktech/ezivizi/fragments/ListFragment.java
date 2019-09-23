@@ -6,11 +6,13 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.core.view.MenuItemCompat;
 import androidx.cardview.widget.CardView;
@@ -29,6 +31,7 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,11 +45,17 @@ import com.kandktech.ezivizi.MainActivity;
 import com.kandktech.ezivizi.QRGenerateActivity;
 import com.kandktech.ezivizi.R;
 import com.kandktech.ezivizi.authentication.CorporateQRGenerate;
+import com.kandktech.ezivizi.authentication.SharedPreferenceClass;
+import com.kandktech.ezivizi.corporate.CorporateActivity;
+import com.kandktech.ezivizi.corporate.CorporateList;
+import com.kandktech.ezivizi.corporate.IndividualActivity;
 import com.kandktech.ezivizi.model_class.SavedUserDetailModelClass;
+import com.kandktech.ezivizi.model_class.ServicesModelClass;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalPayment;
 import com.paypal.android.sdk.payments.PayPalService;
 import com.paypal.android.sdk.payments.PaymentActivity;
+import com.wajahatkarim3.easyflipview.EasyFlipView;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -63,13 +72,19 @@ public class ListFragment extends Fragment {
     FloatingTextButton fab;
     DbHandler dbHandler;
 
+    SharedPreferenceClass sharedPreferenceClass;
+
+    Dialog dialog;
+    Button btnCor,btnInd;
+    RelativeLayout corporate,individual;
+
+
     UserAdapterClass adapterClass;
     Cursor cursor = null;
 
     List<SavedUserDetailModelClass> userDetailModelClasses;
 
-    Dialog dialog;
-    Button btnCor,btnInd;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,45 +92,113 @@ public class ListFragment extends Fragment {
 
 
         view = inflater.inflate(R.layout.fragment_list, container, false);
-        listView = view.findViewById(R.id.listView);
+
+        sharedPreferenceClass = new SharedPreferenceClass(getActivity());
+
         fab = view.findViewById(R.id.action_button);
-        if (getActivity() != null) dbHandler = new DbHandler(getActivity());
 
 
+        listView = view.findViewById(R.id.recyclerView);
+
+        dbHandler = new DbHandler(getActivity());
+
+        userDetailModelClasses = new ArrayList<>();
+
+        cursor = dbHandler.viewData();
+
+//        corporate.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(getActivity(), CorporateList.class));
+//            }
+//        });
+//
+//        individual.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(getActivity(), IndividualActivity.class));
+//            }
+//        });
+
+
+        if (cursor != null){
+
+            if (cursor.moveToFirst()) {
+                do {
+                    SavedUserDetailModelClass userDetail = new SavedUserDetailModelClass();
+
+                    userDetail.setWeb(cursor.getString(cursor.getColumnIndex(DbHandler.user_website)));
+                    userDetail.setUser_logo(cursor.getString(cursor.getColumnIndex(DbHandler.user_logo)));
+                    userDetail.setUsed_layout(cursor.getString(cursor.getColumnIndex(DbHandler.used_layout)));
+                    userDetail.setPosition(cursor.getString(cursor.getColumnIndex(DbHandler.user_position)));
+                    userDetail.setPhone(cursor.getString(cursor.getColumnIndex(DbHandler.user_phone)));
+                    userDetail.setName(cursor.getString(cursor.getColumnIndex(DbHandler.user_name)));
+                    userDetail.setEmail(cursor.getString(cursor.getColumnIndex(DbHandler.user_email)));
+                    userDetail.setDevice_id(cursor.getString(cursor.getColumnIndex(DbHandler.user_device_id)));
+                    userDetail.setColorCode(cursor.getString(cursor.getColumnIndex(DbHandler.color_code)));
+                    userDetail.setAddress(cursor.getString(cursor.getColumnIndex(DbHandler.user_address)));
+                    userDetail.setCompany(cursor.getString(cursor.getColumnIndex(DbHandler.company)));
+                    userDetail.setFaxNo(cursor.getString(cursor.getColumnIndex(DbHandler.fax_no)));
+                    userDetail.setPoBoxNo(cursor.getString(cursor.getColumnIndex(DbHandler.po_box_no)));
+
+//                    if (cursor.getString(cursor.getColumnIndex(DbHandler.user_name)).equals("corporate")){
+
+                    userDetailModelClasses.add(userDetail);
+
+//                    }
+
+                } while (cursor.moveToNext());
+
+            }
+
+            adapterClass = new UserAdapterClass(getActivity(),userDetailModelClasses);
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+            listView.setLayoutManager(mLayoutManager);
+            listView.setItemAnimator(new DefaultItemAnimator());
+            listView.setHasFixedSize(true);
+            listView.setAdapter(adapterClass);
+            cursor.requery();
+            adapterClass.notifyDataSetChanged();
+
+
+
+        }
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                dialog = new Dialog(getActivity(), R.style.Dialog);
-                dialog.setContentView(R.layout.qrgenereate);
-                dialog.setTitle("Choose Card Type!!!");
+                startActivity(new Intent(getActivity(), CorporateQRGenerate.class));
 
-                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-
-                dialog.setCanceledOnTouchOutside(true);
-
-                btnCor = dialog.findViewById(R.id.btnCorporate);
-                btnInd = dialog.findViewById(R.id.btnIndividual);
-
-                btnCor.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        startActivity(new Intent(getActivity(), CorporateQRGenerate.class));
-                        dialog.dismiss();
-                    }
-                });
-
-                btnInd.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        startActivity(new Intent(getActivity(), QRGenerateActivity.class));
-                        dialog.dismiss();
-                    }
-                });
-
-                dialog.show();
+//                dialog = new Dialog(getActivity(), R.style.Dialog);
+//                dialog.setContentView(R.layout.qrgenereate);
+//                dialog.setTitle("Choose Card Type!!!");
+//
+//                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+//
+//                dialog.setCanceledOnTouchOutside(true);
+//
+//                btnCor = dialog.findViewById(R.id.btnCorporate);
+//                btnInd = dialog.findViewById(R.id.btnIndividual);
+//
+//                btnCor.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        startActivity(new Intent(getActivity(), CorporateQRGenerate.class));
+//                        dialog.dismiss();
+//                    }
+//                });
+//
+//                btnInd.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//
+//                        startActivity(new Intent(getActivity(), QRGenerateActivity.class));
+//                        dialog.dismiss();
+//                    }
+//                });
+//
+//                dialog.show();
 
 
             }
@@ -123,61 +206,81 @@ public class ListFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
-        userDetailModelClasses = new ArrayList<>();
-        dbHandler = new DbHandler(getActivity());
 
-//        try {
-            cursor = dbHandler.viewData();
-            Toast.makeText(getActivity(), "Size : "+cursor.getCount(), Toast.LENGTH_SHORT).show();
-            if (cursor != null){
-
-                if (cursor.moveToFirst()) {
-                    do {
-                        SavedUserDetailModelClass userDetail = new SavedUserDetailModelClass();
-
-                        userDetail.setWeb(cursor.getString(cursor.getColumnIndex(DbHandler.user_website)));
-                        userDetail.setUser_logo(cursor.getString(cursor.getColumnIndex(DbHandler.user_logo)));
-                        userDetail.setUsed_layout(cursor.getString(cursor.getColumnIndex(DbHandler.used_layout)));
-                        userDetail.setPosition(cursor.getString(cursor.getColumnIndex(DbHandler.user_position)));
-                        userDetail.setPhone(cursor.getString(cursor.getColumnIndex(DbHandler.user_phone)));
-                        userDetail.setName(cursor.getString(cursor.getColumnIndex(DbHandler.user_name)));
-                        userDetail.setEmail(cursor.getString(cursor.getColumnIndex(DbHandler.user_email)));
-                        userDetail.setDevice_id(cursor.getString(cursor.getColumnIndex(DbHandler.user_device_id)));
-                        userDetail.setColorCode(cursor.getString(cursor.getColumnIndex(DbHandler.color_code)));
-                        userDetail.setAddress(cursor.getString(cursor.getColumnIndex(DbHandler.user_address)));
-                        userDetail.setCompany(cursor.getString(cursor.getColumnIndex(DbHandler.company)));
-
-
-                       userDetailModelClasses.add(userDetail);
-
-                    } while (cursor.moveToNext());
-
-                }
-
-                adapterClass = new UserAdapterClass(getActivity(),userDetailModelClasses);
-                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-                listView.setLayoutManager(mLayoutManager);
-                listView.setItemAnimator(new DefaultItemAnimator());
-                listView.setHasFixedSize(true);
-                listView.setAdapter(adapterClass);
-                cursor.requery();
-                adapterClass.notifyDataSetChanged();
-
-            }
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
 
 
         return view;
     }
 
 
+
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.menu_main, menu);
+        SearchManager SManager =  (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        MenuItem searchMenuItem = menu.findItem(R.id.app_bar_search);
+        SearchView searchViewAction = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
+        if (SManager != null) {
+            searchViewAction.setSearchableInfo(SManager.getSearchableInfo(getActivity().getComponentName()));
+        }
+        searchViewAction.setIconifiedByDefault(true);
+
+        SearchView.OnQueryTextListener textChangeListener = new SearchView.OnQueryTextListener()
+        {
+            @Override
+            public boolean onQueryTextChange(String newText)
+            {
+//                adapterClass.getFilter().filter(newText);
+                return true;
+            }
+            @Override
+            public boolean onQueryTextSubmit(String query)
+            {
+//                adapterClass.getFilter().filter(query);
+                System.out.println("on query submit: "+query);
+                return true;
+            }
+        };
+        searchViewAction.setOnQueryTextListener(textChangeListener);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.app_bar_search:
+
+                return true;
+
+//            case R.id.edit:
+//                if (sharedPreferenceClass.getName().equals("corporate")){
+//
+//                    startActivity(new Intent(getActivity(),CorporateQRGenerate.class));
+//
+//                }else{
+//
+//                    startActivity(new Intent(getActivity(),QRGenerateActivity.class));
+//
+//
+//                }
+//
+//
+//                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     public class UserAdapterClass extends RecyclerView.Adapter<UserAdapterClass.MyViewHolder> implements Filterable {
 
         Context context;
         List<SavedUserDetailModelClass> savedUserDetailModelClassList;
         List<SavedUserDetailModelClass> filtersavedUserDetailModelClassList;
+        List<ServicesModelClass> servicesModelClassList;
 
         public UserAdapterClass(Context context, List<SavedUserDetailModelClass> savedUserDetailModelClassList) {
             this.context = context;
@@ -190,83 +293,171 @@ public class ListFragment extends Fragment {
         @Override
         public UserAdapterClass.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
-            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.right_view_layout,viewGroup,false);
+            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.corporate_list_item,viewGroup,false);
 
-            return new MyViewHolder(view);
+            return new UserAdapterClass.MyViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull UserAdapterClass.MyViewHolder holder, int i) {
-
+        public void onBindViewHolder(@NonNull final UserAdapterClass.MyViewHolder holder, int i) {
+            servicesModelClassList = new ArrayList<>();
             SavedUserDetailModelClass savedUserDetailModelClass = savedUserDetailModelClassList.get(i);
 
+            try {
+                Cursor cursor = dbHandler.viewServices(savedUserDetailModelClass.getDevice_id());
+                if (cursor != null){
+                    if (cursor.moveToFirst()) {
+                        do {
+
+                            ServicesModelClass servicesModelClass1 = new ServicesModelClass();
+
+                            servicesModelClass1.setService6(cursor.getString(cursor.getColumnIndex(DbHandler.service_six)));
+                            servicesModelClass1.setService5(cursor.getString(cursor.getColumnIndex(DbHandler.service_five)));
+                            servicesModelClass1.setService4(cursor.getString(cursor.getColumnIndex(DbHandler.service_four)));
+                            servicesModelClass1.setService3(cursor.getString(cursor.getColumnIndex(DbHandler.service_three)));
+                            servicesModelClass1.setService2(cursor.getString(cursor.getColumnIndex(DbHandler.service_two)));
+                            servicesModelClass1.setService1(cursor.getString(cursor.getColumnIndex(DbHandler.service_one)));
+
+                            servicesModelClassList.add(servicesModelClass1);
+
+                        } while (cursor.moveToNext());
+
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+//            ServiceAdapterClass adapter = new ServiceAdapterClass(servicesModelClassList);
+//            holder.list3.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+//            holder.list3.setHasFixedSize(true);
+//            holder.list3.setAdapter(adapter);
+
+            ServiceAdapterClass adapter = new ServiceAdapterClass(servicesModelClassList);
+            holder.listView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            holder.listView.setHasFixedSize(true);
+            holder.listView.setAdapter(adapter);
+
+            holder.listView1.setLayoutManager(new LinearLayoutManager(getActivity()));
+            holder.listView1.setHasFixedSize(true);
+            holder.listView1.setAdapter(adapter);
+
+            holder.listView2.setLayoutManager(new LinearLayoutManager(getActivity()));
+            holder.listView2.setHasFixedSize(true);
+            holder.listView2.setAdapter(adapter);
+
+            holder.listView3.setLayoutManager(new LinearLayoutManager(getActivity()));
+            holder.listView3.setHasFixedSize(true);
+            holder.listView3.setAdapter(adapter);
+
+            holder.listView4.setLayoutManager(new LinearLayoutManager(getActivity()));
+            holder.listView4.setHasFixedSize(true);
+            holder.listView4.setAdapter(adapter);
+
+            holder.listView5.setLayoutManager(new LinearLayoutManager(getActivity()));
+            holder.listView5.setHasFixedSize(true);
+            holder.listView5.setAdapter(adapter);
+
+            System.out.println("UsedLayout : "+savedUserDetailModelClass.getUsed_layout());
+
             if (savedUserDetailModelClass.getUsed_layout().equals("1")){
-                holder.rightView.setVisibility(View.GONE);
-                holder.semiView.setVisibility(View.GONE);
-                holder.curveView.setVisibility(View.GONE);
-                holder.halfCurveView.setVisibility(View.GONE);
-                holder.up_downView.setVisibility(View.GONE);
-                holder.sideView.setVisibility(View.GONE);
-                holder.halfView.setVisibility(View.VISIBLE);
+                holder.easyFlipView.setVisibility(View.GONE);
+                holder.easyFlipView2.setVisibility(View.GONE);
+                holder.easyFlipView3.setVisibility(View.GONE);
+                holder.easyFlipView4.setVisibility(View.GONE);
+                holder.easyFlipView1.setVisibility(View.GONE);
+                holder.easyFlipView5.setVisibility(View.VISIBLE);
 
             }
             if (savedUserDetailModelClass.getUsed_layout().equals("2")){
-                holder.rightView.setVisibility(View.GONE);
-                holder.semiView.setVisibility(View.GONE);
-                holder.curveView.setVisibility(View.GONE);
-                holder.halfCurveView.setVisibility(View.GONE);
-                holder.up_downView.setVisibility(View.GONE);
-                holder.sideView.setVisibility(View.VISIBLE);
-                holder.halfView.setVisibility(View.GONE);
+                holder.easyFlipView.setVisibility(View.VISIBLE);
+                holder.easyFlipView2.setVisibility(View.GONE);
+                holder.easyFlipView3.setVisibility(View.GONE);
+                holder.easyFlipView4.setVisibility(View.GONE);
+                holder.easyFlipView1.setVisibility(View.GONE);
+                holder.easyFlipView5.setVisibility(View.GONE);
             }
             if (savedUserDetailModelClass.getUsed_layout().equals("3")){
-                holder.rightView.setVisibility(View.GONE);
-                holder.semiView.setVisibility(View.GONE);
-                holder.curveView.setVisibility(View.VISIBLE);
-                holder.halfCurveView.setVisibility(View.GONE);
-                holder.up_downView.setVisibility(View.GONE);
-                holder.sideView.setVisibility(View.GONE);
-                holder.halfView.setVisibility(View.GONE);
+                holder.easyFlipView.setVisibility(View.GONE);
+                holder.easyFlipView2.setVisibility(View.GONE);
+                holder.easyFlipView3.setVisibility(View.GONE);
+                holder.easyFlipView4.setVisibility(View.GONE);
+                holder.easyFlipView1.setVisibility(View.VISIBLE);
+                holder.easyFlipView5.setVisibility(View.GONE);
             }
 
             if (savedUserDetailModelClass.getUsed_layout().equals("4")){
-                holder.rightView.setVisibility(View.GONE);
-                holder.semiView.setVisibility(View.GONE);
-                holder.curveView.setVisibility(View.GONE);
-                holder.halfCurveView.setVisibility(View.VISIBLE);
-                holder.up_downView.setVisibility(View.GONE);
-                holder.sideView.setVisibility(View.GONE);
-                holder.halfView.setVisibility(View.GONE);
+                holder.easyFlipView.setVisibility(View.GONE);
+                holder.easyFlipView2.setVisibility(View.VISIBLE);
+                holder.easyFlipView3.setVisibility(View.GONE);
+                holder.easyFlipView4.setVisibility(View.GONE);
+                holder.easyFlipView1.setVisibility(View.GONE);
+                holder.easyFlipView5.setVisibility(View.GONE);
             }
 
             if (savedUserDetailModelClass.getUsed_layout().equals("5")){
-                holder.rightView.setVisibility(View.GONE);
-                holder.semiView.setVisibility(View.GONE);
-                holder.curveView.setVisibility(View.GONE);
-                holder.halfCurveView.setVisibility(View.GONE);
-                holder.up_downView.setVisibility(View.VISIBLE);
-                holder.sideView.setVisibility(View.GONE);
-                holder.halfView.setVisibility(View.GONE);
+                holder.easyFlipView.setVisibility(View.GONE);
+                holder.easyFlipView2.setVisibility(View.GONE);
+                holder.easyFlipView3.setVisibility(View.VISIBLE);
+                holder.easyFlipView4.setVisibility(View.GONE);
+                holder.easyFlipView1.setVisibility(View.GONE);
+                holder.easyFlipView5.setVisibility(View.GONE);
             }
 
             if (savedUserDetailModelClass.getUsed_layout().equals("6")){
-                holder.rightView.setVisibility(View.VISIBLE);
-                holder.semiView.setVisibility(View.GONE);
-                holder.curveView.setVisibility(View.GONE);
-                holder.halfCurveView.setVisibility(View.GONE);
-                holder.up_downView.setVisibility(View.GONE);
-                holder.sideView.setVisibility(View.GONE);
-                holder.halfView.setVisibility(View.GONE);
+                holder.easyFlipView.setVisibility(View.GONE);
+                holder.easyFlipView2.setVisibility(View.GONE);
+                holder.easyFlipView3.setVisibility(View.GONE);
+                holder.easyFlipView4.setVisibility(View.VISIBLE);
+                holder.easyFlipView1.setVisibility(View.GONE);
+                holder.easyFlipView5.setVisibility(View.GONE);
             }
 
             if (savedUserDetailModelClass.getUsed_layout().equals("7")){
-                holder.rightView.setVisibility(View.GONE);
-                holder.semiView.setVisibility(View.VISIBLE);
-                holder.curveView.setVisibility(View.GONE);
-                holder.halfCurveView.setVisibility(View.GONE);
-                holder.up_downView.setVisibility(View.GONE);
-                holder.sideView.setVisibility(View.GONE);
-                holder.halfView.setVisibility(View.GONE);
+                holder.easyFlipView.setVisibility(View.GONE);
+                holder.easyFlipView2.setVisibility(View.GONE);
+                holder.easyFlipView3.setVisibility(View.GONE);
+                holder.easyFlipView4.setVisibility(View.GONE);
+                holder.easyFlipView1.setVisibility(View.GONE);
+                holder.easyFlipView5.setVisibility(View.GONE);
+            }
+
+            String faxNo = savedUserDetailModelClass.getFaxNo();
+            String poBoxNo = savedUserDetailModelClass.getPoBoxNo();
+
+            if (faxNo.equals("0"))
+            {
+                holder.txtFax1.setVisibility(View.GONE);
+                holder.txtFax2.setVisibility(View.GONE);
+                holder.txtFax3.setVisibility(View.GONE);
+                holder.txtFax4.setVisibility(View.GONE);
+                holder.txtFax5.setVisibility(View.GONE);
+                holder.txtFax6.setVisibility(View.GONE);
+            }else{
+                holder.txtFax1.setText("Fax No. : "+faxNo);
+                holder.txtFax2.setText("Fax No. : "+faxNo);
+                holder.txtFax3.setText("Fax No. : "+faxNo);
+                holder.txtFax4.setText("Fax No. : "+faxNo);
+                holder.txtFax5.setText("Fax No. : "+faxNo);
+                holder.txtFax6.setText("Fax No. : "+faxNo);
+            }
+
+            if (poBoxNo.equals("0"))
+            {
+                holder.txtPo1.setVisibility(View.GONE);
+                holder.txtPo2.setVisibility(View.GONE);
+                holder.txtPo3.setVisibility(View.GONE);
+                holder.txtPo4.setVisibility(View.GONE);
+                holder.txtPo5.setVisibility(View.GONE);
+                holder.txtPo6.setVisibility(View.GONE);
+            }else{
+                holder.txtPo1.setText("Po Box No. : "+poBoxNo);
+                holder.txtPo2.setText("Po Box No. : "+poBoxNo);
+                holder.txtPo3.setText("Po Box No. : "+poBoxNo);
+                holder.txtPo4.setText("Po Box No. : "+poBoxNo);
+                holder.txtPo5.setText("Po Box No. : "+poBoxNo);
+                holder.txtPo6.setText("Po Box No. : "+poBoxNo);
             }
 
 
@@ -327,103 +518,105 @@ public class ListFragment extends Fragment {
             holder.txtCompany4.setText(savedUserDetailModelClass.getCompany());
             holder.txtCompany5.setText(savedUserDetailModelClass.getCompany());
             holder.txtCompany6.setText(savedUserDetailModelClass.getCompany());
+            holder.txtCompany7.setText(savedUserDetailModelClass.getCompany());
 
-            holder.txtPh.setLinkTextColor(Integer.parseInt(colorCode));
-            holder.txtWeb.setLinkTextColor(Integer.parseInt(colorCode));
-            holder.txtEmail.setLinkTextColor(Integer.parseInt(colorCode));
-            holder.txtAddress.setTextColor(Integer.parseInt(colorCode));
-            holder.txtPh1.setLinkTextColor(Integer.parseInt(colorCode));
-            holder.txtWeb1.setLinkTextColor(Integer.parseInt(colorCode));
-            holder.txtEmail1.setLinkTextColor(Integer.parseInt(colorCode));
-            holder.txtAddress1.setTextColor(Integer.parseInt(colorCode));
-            holder.txtPh2.setLinkTextColor(Integer.parseInt(colorCode));
-            holder.txtWeb2.setLinkTextColor(Integer.parseInt(colorCode));
-            holder.txtEmail2.setLinkTextColor(Integer.parseInt(colorCode));
-            holder.txtAddress2.setTextColor(Integer.parseInt(colorCode));
-            holder.txtPh3.setLinkTextColor(Integer.parseInt(colorCode));
-            holder.txtWeb3.setLinkTextColor(Integer.parseInt(colorCode));
-            holder.txtEmail3.setLinkTextColor(Integer.parseInt(colorCode));
-            holder.txtAddress3.setTextColor(Integer.parseInt(colorCode));
-            holder.txtPh4.setLinkTextColor(Integer.parseInt(colorCode));
-            holder.txtWeb4.setLinkTextColor(Integer.parseInt(colorCode));
-            holder.txtEmail4.setLinkTextColor(Integer.parseInt(colorCode));
-            holder.txtAddress4.setTextColor(Integer.parseInt(colorCode));
-            holder.txtPh5.setLinkTextColor(Integer.parseInt(colorCode));
-            holder.txtWeb5.setLinkTextColor(Integer.parseInt(colorCode));
-            holder.txtEmail5.setLinkTextColor(Integer.parseInt(colorCode));
-            holder.txtAddress5.setTextColor(Integer.parseInt(colorCode));
-            holder.txtPh6.setLinkTextColor(Integer.parseInt(colorCode));
-            holder.txtWeb6.setLinkTextColor(Integer.parseInt(colorCode));
-            holder.txtEmail6.setLinkTextColor(Integer.parseInt(colorCode));
-            holder.txtAddress6.setTextColor(Integer.parseInt(colorCode));
+            holder.txtPh.setLinkTextColor(Color.parseColor("#"+colorCode));
+            holder.txtWeb.setLinkTextColor(Color.parseColor("#"+colorCode));
+            holder.txtEmail.setLinkTextColor(Color.parseColor("#"+colorCode));
+            holder.txtAddress.setTextColor(Color.parseColor("#"+colorCode));
+            holder.txtPh1.setLinkTextColor(Color.parseColor("#"+colorCode));
+            holder.txtWeb1.setLinkTextColor(Color.parseColor("#"+colorCode));
+            holder.txtEmail1.setLinkTextColor(Color.parseColor("#"+colorCode));
+            holder.txtAddress1.setTextColor(Color.parseColor("#"+colorCode));
+            holder.txtPh2.setLinkTextColor(Color.parseColor("#"+colorCode));
+            holder.txtWeb2.setLinkTextColor(Color.parseColor("#"+colorCode));
+            holder.txtEmail2.setLinkTextColor(Color.parseColor("#"+colorCode));
+            holder.txtAddress2.setTextColor(Color.parseColor("#"+colorCode));
+            holder.txtPh3.setLinkTextColor(Color.parseColor("#"+colorCode));
+            holder.txtWeb3.setLinkTextColor(Color.parseColor("#"+colorCode));
+            holder.txtEmail3.setLinkTextColor(Color.parseColor("#"+colorCode));
+            holder.txtAddress3.setTextColor(Color.parseColor("#"+colorCode));
+            holder.txtPh4.setLinkTextColor(Color.parseColor("#"+colorCode));
+            holder.txtWeb4.setLinkTextColor(Color.parseColor("#"+colorCode));
+            holder.txtEmail4.setLinkTextColor(Color.parseColor("#"+colorCode));
+            holder.txtAddress4.setTextColor(Color.parseColor("#"+colorCode));
+            holder.txtPh5.setLinkTextColor(Color.parseColor("#"+colorCode));
+            holder.txtWeb5.setLinkTextColor(Color.parseColor("#"+colorCode));
+            holder.txtEmail5.setLinkTextColor(Color.parseColor("#"+colorCode));
+            holder.txtAddress5.setTextColor(Color.parseColor("#"+colorCode));
+            holder.txtPh6.setLinkTextColor(Color.parseColor("#"+colorCode));
+            holder.txtWeb6.setLinkTextColor(Color.parseColor("#"+colorCode));
+            holder.txtEmail6.setLinkTextColor(Color.parseColor("#"+colorCode));
+            holder.txtAddress6.setTextColor(Color.parseColor("#"+colorCode));
 
-            holder.halfView.setBackgroundColor(Integer.parseInt(colorCode));
-            holder.semiView.setCardBackgroundColor(Integer.parseInt(colorCode));
-            holder.rightView.setBackgroundColor(Integer.parseInt(colorCode));
-            holder.sideView.setBackgroundColor(Integer.parseInt(colorCode));
-            holder.curveView.setBackgroundColor(Integer.parseInt(colorCode));
-            holder.halfCurveView.setBackgroundColor(Integer.parseInt(colorCode));
-            holder.up_downView.setBackgroundColor(Integer.parseInt(colorCode));
+            holder.txtFax5.setBackgroundColor(Color.parseColor("#"+colorCode));
+
+            holder.conHalfView.setBackgroundColor(Color.parseColor("#"+colorCode));
+            holder.conUpDownView.setBackgroundColor(Color.parseColor("#"+colorCode));
+            holder.conSideView.setBackgroundColor(Color.parseColor("#"+colorCode));
+            holder.conRightView.setBackgroundColor(Color.parseColor("#"+colorCode));
+            holder.conHalfCurveView.setBackgroundColor(Color.parseColor("#"+colorCode));
+            holder.conCurView.setBackgroundColor(Color.parseColor("#"+colorCode));
 
             GradientDrawable drawable = (GradientDrawable) holder.phImg.getBackground();
-            drawable.setColor(Integer.parseInt(colorCode));
+            drawable.setColor(Color.parseColor("#"+colorCode));
 
             GradientDrawable drawable1 = (GradientDrawable) holder.webImg.getBackground();
-            drawable1.setColor(Integer.parseInt(colorCode));
+            drawable1.setColor(Color.parseColor("#"+colorCode));
 
             GradientDrawable drawable2 = (GradientDrawable) holder.emailImg.getBackground();
-            drawable2.setColor(Integer.parseInt(colorCode));
+            drawable2.setColor(Color.parseColor("#"+colorCode));
 
             GradientDrawable drawable3 = (GradientDrawable) holder.locImg.getBackground();
-            drawable3.setColor(Integer.parseInt(colorCode));
+            drawable3.setColor(Color.parseColor("#"+colorCode));
 
             GradientDrawable drawable4 = (GradientDrawable) holder.phImg1.getBackground();
-            drawable4.setColor(Integer.parseInt(colorCode));
+            drawable4.setColor(Color.parseColor("#"+colorCode));
 
             GradientDrawable drawable5 = (GradientDrawable) holder.webImg1.getBackground();
-            drawable5.setColor(Integer.parseInt(colorCode));
+            drawable5.setColor(Color.parseColor("#"+colorCode));
 
             GradientDrawable drawable6 = (GradientDrawable) holder.emailImg1.getBackground();
-            drawable6.setColor(Integer.parseInt(colorCode));
+            drawable6.setColor(Color.parseColor("#"+colorCode));
 
             GradientDrawable drawable7 = (GradientDrawable) holder.locImg1.getBackground();
-            drawable7.setColor(Integer.parseInt(colorCode));
+            drawable7.setColor(Color.parseColor("#"+colorCode));
 
             GradientDrawable drawable8 = (GradientDrawable) holder.phImg2.getBackground();
-            drawable8.setColor(Integer.parseInt(colorCode));
+            drawable8.setColor(Color.parseColor("#"+colorCode));
 
             GradientDrawable drawable9 = (GradientDrawable) holder.webImg2.getBackground();
-            drawable9.setColor(Integer.parseInt(colorCode));
+            drawable9.setColor(Color.parseColor("#"+colorCode));
 
             GradientDrawable drawable10 = (GradientDrawable) holder.emailImg2.getBackground();
-            drawable10.setColor(Integer.parseInt(colorCode));
+            drawable10.setColor(Color.parseColor("#"+colorCode));
 
             GradientDrawable drawable11 = (GradientDrawable) holder.locImg2.getBackground();
-            drawable11.setColor(Integer.parseInt(colorCode));
+            drawable11.setColor(Color.parseColor("#"+colorCode));
 
             GradientDrawable drawable12 = (GradientDrawable) holder.phImg3.getBackground();
-            drawable12.setColor(Integer.parseInt(colorCode));
+            drawable12.setColor(Color.parseColor("#"+colorCode));
 
             GradientDrawable drawable13 = (GradientDrawable) holder.webImg3.getBackground();
-            drawable13.setColor(Integer.parseInt(colorCode));
+            drawable13.setColor(Color.parseColor("#"+colorCode));
 
             GradientDrawable drawable14 = (GradientDrawable) holder.emailImg3.getBackground();
-            drawable14.setColor(Integer.parseInt(colorCode));
+            drawable14.setColor(Color.parseColor("#"+colorCode));
 
             GradientDrawable drawable15 = (GradientDrawable) holder.locImg3.getBackground();
-            drawable15.setColor(Integer.parseInt(colorCode));
+            drawable15.setColor(Color.parseColor("#"+colorCode));
 
             GradientDrawable drawable16 = (GradientDrawable) holder.phImg4.getBackground();
-            drawable16.setColor(Integer.parseInt(colorCode));
+            drawable16.setColor(Color.parseColor("#"+colorCode));
 
             GradientDrawable drawable17 = (GradientDrawable) holder.webImg4.getBackground();
-            drawable17.setColor(Integer.parseInt(colorCode));
+            drawable17.setColor(Color.parseColor("#"+colorCode));
 
             GradientDrawable drawable18 = (GradientDrawable) holder.emailImg4.getBackground();
-            drawable18.setColor(Integer.parseInt(colorCode));
+            drawable18.setColor(Color.parseColor("#"+colorCode));
 
             GradientDrawable drawable19 = (GradientDrawable) holder.locImg4.getBackground();
-            drawable19.setColor(Integer.parseInt(colorCode));
+            drawable19.setColor(Color.parseColor("#"+colorCode));
 
             File pictureFileDir1 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), ".ezivizi");
             String filename1 = pictureFileDir1.getPath() +File.separator+ Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID)+".jpg";
@@ -438,7 +631,111 @@ public class ListFragment extends Fragment {
             Glide.with(getActivity()).load(savedUserDetailModelClass.getUser_logo()).into(holder.img6);
 
 
+            holder.easyFlipView.setFlipDuration(1000);
+            holder.easyFlipView.setFlipEnabled(true);
+            holder.easyFlipView1.setFlipDuration(1000);
+            holder.easyFlipView1.setFlipEnabled(true);
+            holder.easyFlipView2.setFlipDuration(1000);
+            holder.easyFlipView2.setFlipEnabled(true);
+            holder.easyFlipView3.setFlipDuration(1000);
+            holder.easyFlipView3.setFlipEnabled(true);
+            holder.easyFlipView5.setFlipDuration(1000);
+            holder.easyFlipView5.setFlipEnabled(true);
+            holder.easyFlipView4.setFlipDuration(1000);
+            holder.easyFlipView4.setFlipEnabled(true);
 
+            holder.sideView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    holder.easyFlipView.flipTheView();
+                }
+            });
+
+            holder.halfView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    holder.easyFlipView5.flipTheView();
+                }
+            });
+
+            holder.curveView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    holder.easyFlipView1.flipTheView();
+                }
+            });
+
+            holder.halfCurveView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    holder.easyFlipView2.flipTheView();
+                }
+            });
+
+            holder.up_downView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    holder.easyFlipView3.flipTheView();
+                }
+            });
+
+            holder.rightView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    holder.easyFlipView4.flipTheView();
+                }
+            });
+
+            holder.flip_back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    holder.easyFlipView.flipTheView();
+                }
+            });
+
+            holder.flip_back1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    holder.easyFlipView1.flipTheView();
+                }
+            });
+
+            holder.flip_back2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    holder.easyFlipView2.flipTheView();
+                }
+            });
+
+            holder.flip_back3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    holder.easyFlipView3.flipTheView();
+                }
+            });
+
+            holder.flip_back4.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    holder.easyFlipView4.flipTheView();
+                }
+            });
+
+            holder.flip_back5.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    holder.easyFlipView5.flipTheView();
+                }
+            });
+
+
+
+            holder.bckImg.setBackgroundColor(Color.parseColor("#"+colorCode));
+            holder.bckImg1.setBackgroundColor(Color.parseColor("#"+colorCode));
+            holder.bckImg2.setBackgroundColor(Color.parseColor("#"+colorCode));
+            holder.bckImg3.setBackgroundColor(Color.parseColor("#"+colorCode));
+            holder.bckImg4.setBackgroundColor(Color.parseColor("#"+colorCode));
+            holder.bckImg5.setBackgroundColor(Color.parseColor("#"+colorCode));
 
 
         }
@@ -479,9 +776,10 @@ public class ListFragment extends Fragment {
 
         class MyViewHolder extends RecyclerView.ViewHolder{
 
+            TextView txtFax1,txtFax2,txtFax3,txtFax4,txtFax5,txtFax6,txtPo1,txtPo2,txtPo3,txtPo4,txtPo5,txtPo6;
+
             String colorCode;
-            CardView halfView, rightView;
-            CardView semiView, curveView, halfCurveView, sideView, up_downView;
+            CardView semiView;
             Button btnDone;
             QRGenerateActivity qrGenerateActivity;
             ImageView phImg, locImg, webImg, emailImg, phImg1, locImg1, webImg1, emailImg1, phImg2, locImg2, webImg2, emailImg2;
@@ -494,7 +792,16 @@ public class ListFragment extends Fragment {
             TextView txtPh3, txtEmail3, txtWeb3, txtAddress3, txtPh4, txtEmail4, txtWeb4, txtAddress4, txtPh5, txtEmail5, txtWeb5, txtAddress5, txtPh6, txtEmail6, txtWeb6, txtAddress6;
             TextView txtName3, txtPos3, txtName4, txtPos4, txtName5, txtPos5, txtName6, txtPos6;
             CircleImageView img3, img4, img5, img6, img, img1, img2;
-            TextView txtCompany1, txtCompany2, txtCompany3, txtCompany4, txtCompany5, txtCompany6;
+            TextView txtCompany1, txtCompany2, txtCompany3, txtCompany4, txtCompany5, txtCompany6,txtCompany7;
+
+            RelativeLayout sideView;
+            RelativeLayout halfView, rightView;
+            RelativeLayout curveView, halfCurveView, up_downView;
+            EasyFlipView easyFlipView,easyFlipView1,easyFlipView2,easyFlipView3,easyFlipView4,easyFlipView5;
+            ConstraintLayout conHalfView,conRightView,conSideView,conCurView,conHalfCurveView,conUpDownView;
+            ImageView bckImg,bckImg1,bckImg2,bckImg3,bckImg4,bckImg5;
+            RecyclerView listView,listView1,listView2,listView3,listView4,listView5;
+            RelativeLayout flip_back,flip_back1,flip_back2,flip_back3,flip_back4,flip_back5;
 
 
             public MyViewHolder(@NonNull View view) {
@@ -509,6 +816,61 @@ public class ListFragment extends Fragment {
                 up_downView = view.findViewById(R.id.UpDownView);
 
 
+                easyFlipView = view.findViewById(R.id.cardFlipView);
+                easyFlipView1 = view.findViewById(R.id.cardFlipView1);
+                easyFlipView2 = view.findViewById(R.id.cardFlipView2);
+                easyFlipView3 = view.findViewById(R.id.cardFlipView3);
+                easyFlipView4 = view.findViewById(R.id.cardFlipView4);
+                easyFlipView5 = view.findViewById(R.id.cardFlipView5);
+
+
+
+                flip_back = view.findViewById(R.id.flip_back);
+                flip_back1 = view.findViewById(R.id.flip_back1);
+                flip_back2 = view.findViewById(R.id.flip_back2);
+                flip_back3 = view.findViewById(R.id.flip_back3);
+                flip_back4 = view.findViewById(R.id.flip_back4);
+                flip_back5 = view.findViewById(R.id.flip_back5);
+
+
+
+
+                listView = view.findViewById(R.id.listView);
+                listView1 = view.findViewById(R.id.listView1);
+                listView2= view.findViewById(R.id.listView2);
+                listView3 = view.findViewById(R.id.listView3);
+                listView4 = view.findViewById(R.id.listView4);
+                listView5 = view.findViewById(R.id.listView5);
+
+
+                bckImg = view.findViewById(R.id.bckimg);
+                bckImg1 = view.findViewById(R.id.bckimg1);
+                bckImg2 = view.findViewById(R.id.bckimg2);
+                bckImg3 = view.findViewById(R.id.bckimg3);
+                bckImg4 = view.findViewById(R.id.bckimg4);
+                bckImg5= view.findViewById(R.id.bckimg5);
+
+                conCurView = view.findViewById(R.id.conCurveView);
+                conHalfCurveView = view.findViewById(R.id.conHalfCurveView);
+                conHalfView = view.findViewById(R.id.conHalfView);
+                conRightView = view.findViewById(R.id.conRightView);
+                conSideView = view.findViewById(R.id.consSideView);
+                conUpDownView = view.findViewById(R.id.conUpDownView);
+
+
+                txtFax1 = view.findViewById(R.id.txtFax1);
+                txtFax2 = view.findViewById(R.id.txtFax2);
+                txtFax3 = view.findViewById(R.id.txtFax3);
+                txtFax4 = view.findViewById(R.id.txtFax4);
+                txtFax5 = view.findViewById(R.id.txtFax5);
+                txtFax6 = view.findViewById(R.id.txtFax6);
+
+                txtPo1 = view.findViewById(R.id.txtPo1);
+                txtPo2 = view.findViewById(R.id.txtPo2);
+                txtPo3 = view.findViewById(R.id.txtPo3);
+                txtPo4 = view.findViewById(R.id.txtPo4);
+                txtPo5 = view.findViewById(R.id.txtPo5);
+                txtPo6 = view.findViewById(R.id.txtPo6);
 
 
         /*
@@ -552,7 +914,7 @@ public class ListFragment extends Fragment {
                 txtCompany4 = view.findViewById(R.id.txtCompanyName2);
                 txtCompany5 = view.findViewById(R.id.textView17);
                 txtCompany6 = view.findViewById(R.id.textView19);
-
+                txtCompany7 = view.findViewById(R.id.textView12);
 
         /*
             text
@@ -628,50 +990,78 @@ public class ListFragment extends Fragment {
 
     }
 
+    public class ServiceAdapterClass extends RecyclerView.Adapter<ServiceAdapterClass.MyViewHolder>{
 
+        List<ServicesModelClass> list;
 
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-
-        inflater.inflate(R.menu.menu_main, menu);
-        SearchManager SManager =  (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        MenuItem searchMenuItem = menu.findItem(R.id.app_bar_search);
-        SearchView searchViewAction = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
-        if (SManager != null) {
-            searchViewAction.setSearchableInfo(SManager.getSearchableInfo(getActivity().getComponentName()));
+        public ServiceAdapterClass(List<ServicesModelClass> list) {
+            this.list = list;
         }
-        searchViewAction.setIconifiedByDefault(true);
 
-        SearchView.OnQueryTextListener textChangeListener = new SearchView.OnQueryTextListener()
-        {
-            @Override
-            public boolean onQueryTextChange(String newText)
-            {
-                adapterClass.getFilter().filter(newText);
-                return true;
+        @NonNull
+        @Override
+        public ServiceAdapterClass.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.text_item,parent,false);
+
+            return new ServiceAdapterClass.MyViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ServiceAdapterClass.MyViewHolder holder, int position) {
+
+            ServicesModelClass servicesModelClass = list.get(position);
+            if (servicesModelClass.getService6().equals("no service")){
+                holder.txtView6.setVisibility(View.GONE);
             }
-            @Override
-            public boolean onQueryTextSubmit(String query)
-            {
-                adapterClass.getFilter().filter(query);
-                System.out.println("on query submit: "+query);
-                return true;
+
+            if (servicesModelClass.getService1().equals("no service")){
+                holder.txtView1.setVisibility(View.GONE);
             }
-        };
-        searchViewAction.setOnQueryTextListener(textChangeListener);
-    }
 
+            if (servicesModelClass.getService2().equals("no service")){
+                holder.txtView2.setVisibility(View.GONE);
+            }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.app_bar_search:
+            if (servicesModelClass.getService3().equals("no service")){
+                holder.txtView3.setVisibility(View.GONE);
+            }
 
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+            if (servicesModelClass.getService4().equals("no service")){
+                holder.txtView4.setVisibility(View.GONE);
+            }
+
+            if (servicesModelClass.getService5().equals("no service")){
+                holder.txtView5.setVisibility(View.GONE);
+            }
+
+            holder.txtView1.setText("1"+") "+servicesModelClass.getService1());
+            holder.txtView2.setText("2"+") "+servicesModelClass.getService2());
+            holder.txtView3.setText("3"+") "+servicesModelClass.getService3());
+            holder.txtView4.setText("4"+") "+servicesModelClass.getService4());
+            holder.txtView5.setText("5"+") "+servicesModelClass.getService5());
+            holder.txtView6.setText("6"+") "+servicesModelClass.getService6());
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return list.size();
+        }
+
+        class MyViewHolder extends RecyclerView.ViewHolder{
+
+            TextView txtView1,txtView2,txtView3,txtView4,txtView5,txtView6;
+
+            public MyViewHolder(@NonNull View itemView) {
+                super(itemView);
+                txtView1 = itemView.findViewById(R.id.txtView1);
+                txtView2 = itemView.findViewById(R.id.txtView2);
+                txtView3 = itemView.findViewById(R.id.txtView3);
+                txtView4 = itemView.findViewById(R.id.txtView4);
+                txtView5 = itemView.findViewById(R.id.txtView5);
+                txtView6 = itemView.findViewById(R.id.txtView6);
+            }
         }
     }
 

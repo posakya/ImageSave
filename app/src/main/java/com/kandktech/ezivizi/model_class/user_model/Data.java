@@ -1,6 +1,6 @@
-package com.kandktech.ezivizi.model_class;
+package com.kandktech.ezivizi.model_class.user_model;
 
-public class User_detail
+public class Data
 {
     private String image;
 

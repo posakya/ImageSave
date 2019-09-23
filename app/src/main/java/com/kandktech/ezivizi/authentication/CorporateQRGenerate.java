@@ -2,11 +2,13 @@ package com.kandktech.ezivizi.authentication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -16,12 +18,14 @@ import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kandktech.ezivizi.DbHandler;
 
 import com.kandktech.ezivizi.R;
 import com.kandktech.ezivizi.colorSlider.ColorPickerPopup;
 import com.kandktech.ezivizi.corporate.CorporateActivity;
+import com.kandktech.ezivizi.model_class.ServicesModelClass;
 import com.kandktech.ezivizi.progressDialog.ShowProgress;
 
 
@@ -29,6 +33,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import id.zelory.compressor.Compressor;
@@ -36,12 +42,14 @@ import id.zelory.compressor.Compressor;
 
 public class CorporateQRGenerate extends AppCompatActivity {
 
-    Button button2,btnSave;
+    List<ServicesModelClass> servicesModelClassList;
+
+    Button button2,btnSave,btnAddServices;
     ScrollView scrollView;
     EditText txtFullName,txtEmail,txtAddress,txtPhone,txtPosition,txtWebsite,txtCompanyName,txtFax,txtPoBox;
     String colorCode = "0";
     DbHandler dbHandler;
-
+    String alreadyExist = "no";
     String name,position,email,phone,web,address,company,fax,pobox;
     FloatingActionButton btnLoad;
     final int RQS_IMAGE1 = 1;
@@ -49,9 +57,14 @@ public class CorporateQRGenerate extends AppCompatActivity {
     Bitmap bm1;
     CircleImageView userImg;
     File file;
-
+    String service1,service2,service3,service4,service5,service6;
     ShowProgress showProgress;
     SharedPreferenceClass sharedPreferenceClass;
+    Dialog dialog;
+
+    EditText editSer1,editSer2,editSer3,editSer4,editSer5,editSer6;
+    Button btnSaveService;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +86,10 @@ public class CorporateQRGenerate extends AppCompatActivity {
         txtCompanyName = findViewById(R.id.txtCompanyName);
         txtFax = findViewById(R.id.txtFaxNo);
         txtPoBox = findViewById(R.id.txtPoBox);
+        btnAddServices = findViewById(R.id.btnAddServices);
+
+
+        servicesModelClassList = new ArrayList<>();
 
         showProgress = new ShowProgress(CorporateQRGenerate.this);
 
@@ -99,7 +116,78 @@ public class CorporateQRGenerate extends AppCompatActivity {
             }
         });
 
+
+
         sharedPreferenceClass = new SharedPreferenceClass(getApplicationContext());
+
+        btnAddServices.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog = new Dialog(CorporateQRGenerate.this, R.style.Dialog);
+                dialog.setContentView(R.layout.services);
+                dialog.setTitle("Add Your Services");
+
+
+                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+                dialog.setCanceledOnTouchOutside(true);
+
+                editSer1 = dialog.findViewById(R.id.editService1);
+                editSer2 = dialog.findViewById(R.id.editService2);
+                editSer3 = dialog.findViewById(R.id.editService3);
+                editSer4 = dialog.findViewById(R.id.editService4);
+                editSer5 = dialog.findViewById(R.id.editService5);
+                editSer6 = dialog.findViewById(R.id.editService6);
+                btnSaveService = dialog.findViewById(R.id.btnSaveServices);
+
+
+                btnSaveService.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        saveServices();
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+            }
+        });}
+
+    public void saveServices(){
+
+        service1 = editSer1.getText().toString().trim();
+        service2 = editSer2.getText().toString().trim();
+        service3 = editSer3.getText().toString().trim();
+        service4 = editSer4.getText().toString().trim();
+        service5 = editSer5.getText().toString().trim();
+        service6 = editSer6.getText().toString().trim();
+
+        if (service6.isEmpty()){
+            service6 = "no service";
+        }
+
+        if (service1.isEmpty()){
+            service1 = "no service";
+        }
+
+        if (service2.isEmpty()){
+            service2 = "no service";
+        }
+        if (service3.isEmpty()){
+            service3 = "no service";
+        }
+
+        if (service4.isEmpty()){
+            service4 = "no service";
+        }
+
+        if (service5.isEmpty()){
+            service5 = "no service";
+        }
+
+        dbHandler.addService(sharedPreferenceClass.getUid(),service1,service2,service3,service4,service5,service6);
+
+
     }
 
     @Override
@@ -142,6 +230,7 @@ public class CorporateQRGenerate extends AppCompatActivity {
     }
 
     public void selectColor(){
+
 
         new ColorPickerPopup.Builder(this)
                 .initialColor(Color.RED) // Set initial color
@@ -230,6 +319,7 @@ public class CorporateQRGenerate extends AppCompatActivity {
         i.putExtra("company",company);
         i.putExtra("fax",fax);
         i.putExtra("pobox",pobox);
+        i.putExtra("exists",alreadyExist);
         startActivity(i);
 
     }

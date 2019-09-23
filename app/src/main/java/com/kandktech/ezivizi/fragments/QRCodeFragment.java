@@ -42,7 +42,7 @@ public class QRCodeFragment extends Fragment {
         try {
 
             Glide.with(getActivity()).load("/storage/emulated/0/Pictures/.ezvz/"+"_image_"+sharedPreferences.getLong("imgName",0)+".jpg").into(qrImg);
-//            Glide.with(getActivity()).load("/storage/emulated/0/Pictures/.ezvz/"+"_image_"+WelcomeScreenActivity.deviceId+".jpg").into(qrImg);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -69,8 +69,7 @@ public class QRCodeFragment extends Fragment {
             }
         }
 
-        // Save image to external storage before sending. With out saving, I to got a blank screen as attachment.
-//        String imagePath=saveToExternalSorage(mBitmap);
+
         File f=new File("/storage/emulated/0/Pictures/.ezvz/"+"_image_"+sharedPreferences.getLong("imgName",0)+".jpg");
         Uri screenshotUri = Uri.fromFile(f);
 

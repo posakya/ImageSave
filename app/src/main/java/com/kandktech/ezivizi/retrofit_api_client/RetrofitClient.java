@@ -9,9 +9,9 @@ public class RetrofitClient {
     public static Retrofit retrofit = null;
 
 //    public static String url = "http://EzVz.halfwaiter.com/ezivizi/";
-    public static String imageUrl = "http://192.168.1.12:82/image/";
+    public static String imageUrl = "http://ezvz.ofoodesk.com/public/image/";
 
-    public static String url = "http://192.168.1.12:82/api/";
+    public static String url = "http://ezvz.ofoodesk.com/public/api/";
 
     public static Retrofit getFormData() {
 

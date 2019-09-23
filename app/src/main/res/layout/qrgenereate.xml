@@ -17,7 +17,7 @@
             android:layout_gravity="center"
             android:foreground="@drawable/ripple_effect"
             android:background="@drawable/bck_corporate"
-            android:textSize="18sp"
+            android:textSize="@dimen/_10sdp"
             android:textColor="@color/white"
             android:layout_margin="10dp"
             android:id="@+id/btnCorporate"
@@ -25,14 +25,14 @@
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/_35sdp"
-            android:text="Corporate QrCode"/>
+            android:text="For Corporate"/>
 
 
         <Button
             android:layout_gravity="center"
             android:foreground="@drawable/ripple_effect"
             android:background="@drawable/bck_individual"
-            android:textSize="18sp"
+            android:textSize="@dimen/_10sdp"
             android:textColor="@color/white"
             android:layout_margin="10dp"
             android:id="@+id/btnIndividual"
@@ -40,7 +40,7 @@
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/_35sdp"
-            android:text="Personal QrCode"/>
+            android:text="For Individual"/>
 
 
     </LinearLayout>
