@@ -140,7 +140,6 @@
                     app:layout_constraintVertical_bias="0.134" />
 
                 <TextView
-                    android:visibility="visible"
                     android:id="@+id/txtPosition"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -155,8 +154,8 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/imageView1"
-                    android:layout_width="@dimen/_60sdp"
-                    android:layout_height="@dimen/_60sdp"
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_40sdp"
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="8dp"
@@ -164,7 +163,6 @@
                     app:civ_border_color="#dedede"
                     app:civ_border_width="1dp"
                     app:layout_constraintEnd_toEndOf="@+id/txtCompanyName1"
-                    app:layout_constraintHorizontal_bias="0.084"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -174,11 +172,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     app:layout_constraintBottom_toTopOf="@+id/emailRel1"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.80">
+                    app:layout_constraintTop_toBottomOf="@+id/txtCompanyName1"
+                    app:layout_constraintVertical_bias="0.0">
 
                     <ImageView
                         android:id="@+id/locImg1"
@@ -309,19 +308,16 @@
                     android:id="@+id/txtCompanyName1"
                     android:layout_width="@dimen/_135sdp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
                     android:text="Creatu Developers Pvt. Ltd."
                     android:textAlignment="center"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/_13sdp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/view12"
                     app:layout_constraintEnd_toEndOf="@+id/view12"
-                    app:layout_constraintHorizontal_bias="0.995"
+                    app:layout_constraintHorizontal_bias="0.07"
                     app:layout_constraintStart_toStartOf="@+id/view12"
-                    app:layout_constraintTop_toTopOf="@+id/view12"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView1"
                     app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
@@ -360,7 +356,7 @@
     </com.wajahatkarim3.easyflipview.EasyFlipView>
 
     <com.wajahatkarim3.easyflipview.EasyFlipView
-
+        android:visibility="gone"
         android:id="@+id/cardFlipView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -372,8 +368,7 @@
 
 
         <RelativeLayout
-            android:elevation="5dp"
-            android:visibility="visible"
+            android:visibility="gone"
             android:id="@+id/flip_back"
             android:layout_margin="5dp"
             android:layout_width="match_parent"
@@ -445,6 +440,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+
             android:id="@+id/sideView"
             android:layout_margin="5dp"
             android:elevation="15dp"
@@ -468,7 +464,7 @@
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintVertical_bias="1.0" />
 
                 <TextView
                     android:id="@+id/txtAddress3"
@@ -540,19 +536,15 @@
                     android:id="@+id/imgLogo1"
                     android:layout_width="@dimen/_60sdp"
                     android:layout_height="@dimen/_60sdp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginBottom="24dp"
+                    android:layout_marginBottom="8dp"
                     android:src="@drawable/halfwaiter"
                     app:layout_constraintBottom_toBottomOf="@+id/view"
-                    app:layout_constraintEnd_toEndOf="@+id/view"
-                    app:layout_constraintHorizontal_bias="0.911"
-                    app:layout_constraintStart_toStartOf="@+id/view"
+                    app:layout_constraintEnd_toEndOf="@+id/txtCompanyName2"
+                    app:layout_constraintStart_toStartOf="@+id/txtCompanyName2"
                     app:layout_constraintTop_toTopOf="@+id/view"
-                    app:layout_constraintVertical_bias="0.527" />
+                    app:layout_constraintVertical_bias="0.36" />
 
                 <TextView
-                    android:visibility="visible"
                     android:id="@+id/txtUserName1"
                     android:layout_width="@dimen/_150sdp"
                     android:layout_height="wrap_content"
@@ -568,7 +560,6 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:visibility="visible"
                     android:id="@+id/txtPosition1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -585,17 +576,21 @@
 
                 <TextView
                     android:id="@+id/txtCompanyName2"
-                    android:layout_width="@dimen/_105sdp"
+                    android:layout_width="@dimen/_110sdp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:gravity="center"
                     android:text="EzVz Software Pvt. Ltd."
                     android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/_13sdp"
                     android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/txtFax2"
                     app:layout_constraintEnd_toEndOf="@+id/view"
-                    app:layout_constraintTop_toBottomOf="@+id/imgLogo1" />
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="@+id/imageView7"
+                    app:layout_constraintTop_toBottomOf="@+id/imgLogo1"
+                    app:layout_constraintVertical_bias="0.0" />
 
                 <ImageView
                     android:id="@+id/imageView6"
@@ -908,7 +903,6 @@
                     app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
-                    android:visibility="visible"
                     android:id="@+id/txtUserName3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -923,7 +917,6 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:visibility="visible"
                     android:id="@+id/txtPosition3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -964,6 +957,7 @@
                     app:layout_constraintStart_toStartOf="@+id/view0" />
 
                 <TextView
+                    android:visibility="gone"
                     android:gravity="center"
                     android:id="@+id/textView12"
                     android:layout_width="@dimen/_140sdp"
@@ -1179,7 +1173,6 @@
                     app:layout_constraintTop_toTopOf="@+id/view23" />
 
                 <TextView
-                    android:visibility="visible"
                     android:id="@+id/txtUserName2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -1201,7 +1194,6 @@
                     app:layout_constraintVertical_bias="1.0" />
 
                 <TextView
-                    android:visibility="visible"
                     android:id="@+id/txtPosition2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -1220,18 +1212,16 @@
 
                 <TextView
                     android:id="@+id/txtCompanyName3"
-                    android:layout_width="@dimen/_140sdp"
+                    android:layout_width="@dimen/_130sdp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="12dp"
-                    android:layout_marginRight="12dp"
                     android:text="K and K dskfsd kfds kjfsd kjfsdkj fskdj fdsf"
                     android:textAlignment="center"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/_13sdp"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/view23" />
+                    app:layout_constraintStart_toStartOf="@+id/view23"
+                    app:layout_constraintTop_toBottomOf="@+id/imgLogo2" />
 
                 <TextView
                     android:id="@+id/txtFax4"
@@ -1274,6 +1264,7 @@
         app:flipFrom="front"
         app:flipOnTouch="true"
         app:flipType="horizontal">
+
 
         <RelativeLayout
             android:id="@+id/flip_back3"
@@ -1447,16 +1438,16 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/imageView4"
-                    android:layout_width="@dimen/_60sdp"
-                    android:layout_height="@dimen/_60sdp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginRight="32dp"
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_50sdp"
                     android:src="@drawable/halfwaiter"
                     app:civ_border_color="#dedede"
                     app:civ_border_width="1dp"
                     app:layout_constraintBottom_toBottomOf="@+id/view01"
-                    app:layout_constraintEnd_toEndOf="@+id/view01"
-                    app:layout_constraintTop_toTopOf="@+id/view01" />
+                    app:layout_constraintEnd_toEndOf="@+id/textView18"
+                    app:layout_constraintStart_toStartOf="@+id/textView18"
+                    app:layout_constraintTop_toTopOf="@+id/view01"
+                    app:layout_constraintVertical_bias="0.36" />
 
                 <TextView
                     android:id="@+id/textView11"
@@ -1471,7 +1462,6 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold"
-                    android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/view01"
                     app:layout_constraintTop_toTopOf="@+id/view01"
@@ -1490,7 +1480,6 @@
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_9sdp"
-                    android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="@+id/view01"
                     app:layout_constraintEnd_toEndOf="@+id/view01"
                     app:layout_constraintHorizontal_bias="1.0"
@@ -1571,25 +1560,20 @@
                     android:id="@+id/textView18"
                     android:layout_width="@dimen/_140sdp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
                     android:text="Half Waiter Software Pvt. Ltd."
                     android:textAlignment="center"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/view01"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/view01"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
                 <TextView
                     android:id="@+id/txtPo5"
                     android:layout_width="wrap_content"
                     android:layout_height="19dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginRight="16dp"
                     android:layout_marginBottom="3dp"
                     android:text="Po Box No : 723456df7"
                     android:textColor="@color/white"

@@ -35,6 +35,7 @@
                 android:orientation="vertical">
 
                 <RadioButton
+                    android:textSize="@dimen/_15sdp"
                     android:id="@+id/rbHalf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -205,12 +206,10 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:layout_marginLeft="8dp"
-                            android:layout_marginTop="8dp"
                             android:layout_marginBottom="8dp"
                             app:layout_constraintBottom_toTopOf="@+id/emailRel1"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/txtCompanyName1"
-                            app:layout_constraintVertical_bias="0.0">
+                            app:layout_constraintTop_toBottomOf="@+id/txtCompanyName1">
 
                             <ImageView
                                 android:id="@+id/locImg1"
@@ -395,6 +394,7 @@
                 android:layout_height="wrap_content">
 
                 <RadioButton
+                    android:textSize="@dimen/_15sdp"
                     android:id="@+id/rbSide"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -757,6 +757,7 @@
                 android:layout_height="wrap_content">
 
                 <RadioButton
+                    android:textSize="@dimen/_15sdp"
                     android:id="@+id/rbCurveView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -932,8 +933,8 @@
                             android:id="@+id/txtWeb5"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="35dp"
-                            android:layout_marginLeft="35dp"
+                            android:layout_marginStart="50dp"
+                            android:layout_marginLeft="50dp"
                             android:layout_marginTop="8dp"
                             android:autoLink="web"
                             android:text="www.halfwiter.com"
@@ -1007,8 +1008,8 @@
                             android:id="@+id/txtPo3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="60dp"
-                            android:layout_marginLeft="60dp"
+                            android:layout_marginStart="80dp"
+                            android:layout_marginLeft="80dp"
                             android:layout_marginBottom="8dp"
                             android:text="Po Box No : 723456df7"
                             android:textColor="@color/black"
@@ -1046,6 +1047,7 @@
                 android:layout_height="wrap_content">
 
                 <RadioButton
+                    android:textSize="@dimen/_15sdp"
                     android:id="@+id/rbHalfCurve"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -1269,8 +1271,8 @@
                             android:id="@+id/txtPosition2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="216dp"
-                            android:layout_marginLeft="216dp"
+                            android:layout_marginStart="246dp"
+                            android:layout_marginLeft="246dp"
                             android:layout_marginBottom="8dp"
                             android:background="@color/white"
                             android:paddingRight="5dp"
@@ -1299,12 +1301,12 @@
                             android:id="@+id/txtFax4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="50dp"
-                            android:layout_marginLeft="50dp"
+                            android:layout_marginStart="75dp"
+                            android:layout_marginLeft="75dp"
                             android:layout_marginBottom="16dp"
                             android:text="Fax No: 977-1-4230452"
-                            android:textSize="@dimen/_9sdp"
                             android:textColor="@color/white"
+                            android:textSize="@dimen/_9sdp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent" />
 
@@ -1312,8 +1314,8 @@
                             android:id="@+id/txtPo4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="40dp"
-                            android:layout_marginLeft="40dp"
+                            android:layout_marginStart="60dp"
+                            android:layout_marginLeft="60dp"
                             android:layout_marginBottom="8dp"
                             android:text="Po Box No : 723456df7"
                             android:textColor="@color/white"
@@ -1333,9 +1335,10 @@
                 android:layout_height="wrap_content">
 
                 <RadioButton
+                    android:textSize="@dimen/_15sdp"
                     android:id="@+id/rbupDownView"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="20dp"
                     android:text="Up Down View" />
 
                 <com.wajahatkarim3.easyflipview.EasyFlipView
@@ -1658,8 +1661,8 @@
                             android:id="@+id/txtPo5"
                             android:layout_width="wrap_content"
                             android:layout_height="19dp"
-                            android:layout_marginEnd="0dp"
-                            android:layout_marginRight="0dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginRight="16dp"
                             android:layout_marginBottom="3dp"
                             android:text="Po Box No : 723456df7"
                             android:textColor="@color/white"

@@ -5,7 +5,9 @@ import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -40,6 +42,10 @@ import com.bumptech.glide.Glide;
 import com.esewa.android.sdk.payment.ESewaConfiguration;
 import com.esewa.android.sdk.payment.ESewaPayment;
 import com.esewa.android.sdk.payment.ESewaPaymentActivity;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import com.kandktech.ezivizi.DbHandler;
 import com.kandktech.ezivizi.MainActivity;
 import com.kandktech.ezivizi.QRGenerateActivity;
@@ -47,18 +53,21 @@ import com.kandktech.ezivizi.R;
 import com.kandktech.ezivizi.authentication.CorporateQRGenerate;
 import com.kandktech.ezivizi.authentication.SharedPreferenceClass;
 import com.kandktech.ezivizi.corporate.CorporateActivity;
-import com.kandktech.ezivizi.corporate.CorporateList;
 import com.kandktech.ezivizi.corporate.IndividualActivity;
+import com.kandktech.ezivizi.image_saver.ImageSaver;
 import com.kandktech.ezivizi.model_class.SavedUserDetailModelClass;
 import com.kandktech.ezivizi.model_class.ServicesModelClass;
+import com.kandktech.ezivizi.welcome_screen.WelcomeScreenActivity;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalPayment;
 import com.paypal.android.sdk.payments.PayPalService;
 import com.paypal.android.sdk.payments.PaymentActivity;
+import com.scottyab.aescrypt.AESCrypt;
 import com.wajahatkarim3.easyflipview.EasyFlipView;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,10 +84,7 @@ public class ListFragment extends Fragment {
     SharedPreferenceClass sharedPreferenceClass;
 
     Dialog dialog;
-    Button btnCor,btnInd;
-    RelativeLayout corporate,individual;
-
-
+    ImageView qrCodeImg;
     UserAdapterClass adapterClass;
     Cursor cursor = null;
 
@@ -106,19 +112,6 @@ public class ListFragment extends Fragment {
 
         cursor = dbHandler.viewData();
 
-//        corporate.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                startActivity(new Intent(getActivity(), CorporateList.class));
-//            }
-//        });
-//
-//        individual.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                startActivity(new Intent(getActivity(), IndividualActivity.class));
-//            }
-//        });
 
 
         if (cursor != null){
@@ -170,35 +163,6 @@ public class ListFragment extends Fragment {
 
                 startActivity(new Intent(getActivity(), CorporateQRGenerate.class));
 
-//                dialog = new Dialog(getActivity(), R.style.Dialog);
-//                dialog.setContentView(R.layout.qrgenereate);
-//                dialog.setTitle("Choose Card Type!!!");
-//
-//                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-//
-//                dialog.setCanceledOnTouchOutside(true);
-//
-//                btnCor = dialog.findViewById(R.id.btnCorporate);
-//                btnInd = dialog.findViewById(R.id.btnIndividual);
-//
-//                btnCor.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        startActivity(new Intent(getActivity(), CorporateQRGenerate.class));
-//                        dialog.dismiss();
-//                    }
-//                });
-//
-//                btnInd.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//
-//                        startActivity(new Intent(getActivity(), QRGenerateActivity.class));
-//                        dialog.dismiss();
-//                    }
-//                });
-//
-//                dialog.show();
 
 
             }
@@ -301,7 +265,7 @@ public class ListFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull final UserAdapterClass.MyViewHolder holder, int i) {
             servicesModelClassList = new ArrayList<>();
-            SavedUserDetailModelClass savedUserDetailModelClass = savedUserDetailModelClassList.get(i);
+            final SavedUserDetailModelClass savedUserDetailModelClass = savedUserDetailModelClassList.get(i);
 
             try {
                 Cursor cursor = dbHandler.viewServices(savedUserDetailModelClass.getDevice_id());
@@ -359,7 +323,7 @@ public class ListFragment extends Fragment {
             holder.listView5.setHasFixedSize(true);
             holder.listView5.setAdapter(adapter);
 
-            System.out.println("UsedLayout : "+savedUserDetailModelClass.getUsed_layout());
+
 
             if (savedUserDetailModelClass.getUsed_layout().equals("1")){
                 holder.easyFlipView.setVisibility(View.GONE);
@@ -737,6 +701,556 @@ public class ListFragment extends Fragment {
             holder.bckImg4.setBackgroundColor(Color.parseColor("#"+colorCode));
             holder.bckImg5.setBackgroundColor(Color.parseColor("#"+colorCode));
 
+            holder.flip_back4.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+
+                    dialog = new Dialog(getActivity(), R.style.Dialog);
+                    dialog.setContentView(R.layout.qr_code_image);
+                    dialog.setTitle("Scan QRCode");
+
+                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+                    dialog.setCanceledOnTouchOutside(true);
+
+                    qrCodeImg = dialog.findViewById(R.id.qrCodeImages);
+
+                    QRCodeWriter writer = new QRCodeWriter();
+
+                    String qrCodeData = savedUserDetailModelClass.getName() + "EZVZ" + savedUserDetailModelClass.getAddress() + "EZVZ" + savedUserDetailModelClass.getPhone() + "EZVZ" + savedUserDetailModelClass.getEmail() + "EZVZ" + savedUserDetailModelClass.getWeb() + "EZVZ" + savedUserDetailModelClass.getUser_logo() + "EZVZ" + savedUserDetailModelClass.getPosition() + "EZVZ" + savedUserDetailModelClass.getColorCode() + "EZVZ" + savedUserDetailModelClass.getDevice_id() + "EZVZ" + savedUserDetailModelClass.getUsed_layout() + "EZVZ" + savedUserDetailModelClass.getCompany() + "EZVZ" + savedUserDetailModelClass.getFaxNo() + "EZVZ" + savedUserDetailModelClass.getPoBoxNo() + "EZVZ" + savedUserDetailModelClass.getColorCode();
+                    String password = "EzVz";
+                    String encryptedMsg = "";
+                    try {
+                        encryptedMsg = AESCrypt.encrypt(password, qrCodeData);
+                    } catch (GeneralSecurityException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        BitMatrix bitMatrix = writer.encode(encryptedMsg, BarcodeFormat.QR_CODE, 512, 512);
+                        int width = bitMatrix.getWidth();
+                        int height = bitMatrix.getHeight();
+                        Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+                            }
+
+                        }
+
+
+                        qrCodeImg.setImageBitmap(bmp);
+
+                    } catch (WriterException e) {
+                        e.printStackTrace();
+                    }
+
+                    dialog.show();
+
+                    return true;
+
+                }
+            });
+
+            holder.flip_back.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+
+                    dialog = new Dialog(getActivity(), R.style.Dialog);
+                    dialog.setContentView(R.layout.qr_code_image);
+                    dialog.setTitle("Scan QRCode");
+
+                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+                    dialog.setCanceledOnTouchOutside(true);
+
+                    qrCodeImg = dialog.findViewById(R.id.qrCodeImages);
+
+                    QRCodeWriter writer = new QRCodeWriter();
+
+                    String qrCodeData = savedUserDetailModelClass.getName() + "EZVZ" + savedUserDetailModelClass.getAddress() + "EZVZ" + savedUserDetailModelClass.getPhone() + "EZVZ" + savedUserDetailModelClass.getEmail() + "EZVZ" + savedUserDetailModelClass.getWeb() + "EZVZ" + savedUserDetailModelClass.getUser_logo() + "EZVZ" + savedUserDetailModelClass.getPosition() + "EZVZ" + savedUserDetailModelClass.getColorCode() + "EZVZ" + savedUserDetailModelClass.getDevice_id() + "EZVZ" + savedUserDetailModelClass.getUsed_layout() + "EZVZ" + savedUserDetailModelClass.getCompany() + "EZVZ" + savedUserDetailModelClass.getFaxNo() + "EZVZ" + savedUserDetailModelClass.getPoBoxNo() + "EZVZ" + savedUserDetailModelClass.getColorCode();
+                    String password = "EzVz";
+                    String encryptedMsg = "";
+                    try {
+                        encryptedMsg = AESCrypt.encrypt(password, qrCodeData);
+                    } catch (GeneralSecurityException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        BitMatrix bitMatrix = writer.encode(encryptedMsg, BarcodeFormat.QR_CODE, 512, 512);
+                        int width = bitMatrix.getWidth();
+                        int height = bitMatrix.getHeight();
+                        Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+                            }
+
+                        }
+
+
+                        qrCodeImg.setImageBitmap(bmp);
+
+                    } catch (WriterException e) {
+                        e.printStackTrace();
+                    }
+
+                    dialog.show();
+
+                    return true;
+
+                }
+            });
+
+            holder.flip_back1.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+
+                    dialog = new Dialog(getActivity(), R.style.Dialog);
+                    dialog.setContentView(R.layout.qr_code_image);
+                    dialog.setTitle("Scan QRCode");
+
+                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+                    dialog.setCanceledOnTouchOutside(true);
+
+                    qrCodeImg = dialog.findViewById(R.id.qrCodeImages);
+
+                    QRCodeWriter writer = new QRCodeWriter();
+
+                    String qrCodeData = savedUserDetailModelClass.getName() + "EZVZ" + savedUserDetailModelClass.getAddress() + "EZVZ" + savedUserDetailModelClass.getPhone() + "EZVZ" + savedUserDetailModelClass.getEmail() + "EZVZ" + savedUserDetailModelClass.getWeb() + "EZVZ" + savedUserDetailModelClass.getUser_logo() + "EZVZ" + savedUserDetailModelClass.getPosition() + "EZVZ" + savedUserDetailModelClass.getColorCode() + "EZVZ" + savedUserDetailModelClass.getDevice_id() + "EZVZ" + savedUserDetailModelClass.getUsed_layout() + "EZVZ" + savedUserDetailModelClass.getCompany() + "EZVZ" + savedUserDetailModelClass.getFaxNo() + "EZVZ" + savedUserDetailModelClass.getPoBoxNo() + "EZVZ" + savedUserDetailModelClass.getColorCode();
+                    String password = "EzVz";
+                    String encryptedMsg = "";
+                    try {
+                        encryptedMsg = AESCrypt.encrypt(password, qrCodeData);
+                    } catch (GeneralSecurityException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        BitMatrix bitMatrix = writer.encode(encryptedMsg, BarcodeFormat.QR_CODE, 512, 512);
+                        int width = bitMatrix.getWidth();
+                        int height = bitMatrix.getHeight();
+                        Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+                            }
+
+                        }
+
+
+                        qrCodeImg.setImageBitmap(bmp);
+
+                    } catch (WriterException e) {
+                        e.printStackTrace();
+                    }
+
+                    dialog.show();
+
+                    return true;
+
+                }
+            });
+
+            holder.flip_back2.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+
+                    dialog = new Dialog(getActivity(), R.style.Dialog);
+                    dialog.setContentView(R.layout.qr_code_image);
+                    dialog.setTitle("Scan QRCode");
+
+                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+                    dialog.setCanceledOnTouchOutside(true);
+
+                    qrCodeImg = dialog.findViewById(R.id.qrCodeImages);
+
+                    QRCodeWriter writer = new QRCodeWriter();
+
+                    String qrCodeData = savedUserDetailModelClass.getName() + "EZVZ" + savedUserDetailModelClass.getAddress() + "EZVZ" + savedUserDetailModelClass.getPhone() + "EZVZ" + savedUserDetailModelClass.getEmail() + "EZVZ" + savedUserDetailModelClass.getWeb() + "EZVZ" + savedUserDetailModelClass.getUser_logo() + "EZVZ" + savedUserDetailModelClass.getPosition() + "EZVZ" + savedUserDetailModelClass.getColorCode() + "EZVZ" + savedUserDetailModelClass.getDevice_id() + "EZVZ" + savedUserDetailModelClass.getUsed_layout() + "EZVZ" + savedUserDetailModelClass.getCompany() + "EZVZ" + savedUserDetailModelClass.getFaxNo() + "EZVZ" + savedUserDetailModelClass.getPoBoxNo() + "EZVZ" + savedUserDetailModelClass.getColorCode();
+                    String password = "EzVz";
+                    String encryptedMsg = "";
+                    try {
+                        encryptedMsg = AESCrypt.encrypt(password, qrCodeData);
+                    } catch (GeneralSecurityException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        BitMatrix bitMatrix = writer.encode(encryptedMsg, BarcodeFormat.QR_CODE, 512, 512);
+                        int width = bitMatrix.getWidth();
+                        int height = bitMatrix.getHeight();
+                        Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+                            }
+
+                        }
+
+
+                        qrCodeImg.setImageBitmap(bmp);
+
+                    } catch (WriterException e) {
+                        e.printStackTrace();
+                    }
+
+                    dialog.show();
+
+                    return true;
+
+                }
+            });
+
+            holder.flip_back3.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+
+                    dialog = new Dialog(getActivity(), R.style.Dialog);
+                    dialog.setContentView(R.layout.qr_code_image);
+                    dialog.setTitle("Scan QRCode");
+
+                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+                    dialog.setCanceledOnTouchOutside(true);
+
+                    qrCodeImg = dialog.findViewById(R.id.qrCodeImages);
+
+                    QRCodeWriter writer = new QRCodeWriter();
+
+                    String qrCodeData = savedUserDetailModelClass.getName() + "EZVZ" + savedUserDetailModelClass.getAddress() + "EZVZ" + savedUserDetailModelClass.getPhone() + "EZVZ" + savedUserDetailModelClass.getEmail() + "EZVZ" + savedUserDetailModelClass.getWeb() + "EZVZ" + savedUserDetailModelClass.getUser_logo() + "EZVZ" + savedUserDetailModelClass.getPosition() + "EZVZ" + savedUserDetailModelClass.getColorCode() + "EZVZ" + savedUserDetailModelClass.getDevice_id() + "EZVZ" + savedUserDetailModelClass.getUsed_layout() + "EZVZ" + savedUserDetailModelClass.getCompany() + "EZVZ" + savedUserDetailModelClass.getFaxNo() + "EZVZ" + savedUserDetailModelClass.getPoBoxNo() + "EZVZ" + savedUserDetailModelClass.getColorCode();
+                    String password = "EzVz";
+                    String encryptedMsg = "";
+                    try {
+                        encryptedMsg = AESCrypt.encrypt(password, qrCodeData);
+                    } catch (GeneralSecurityException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        BitMatrix bitMatrix = writer.encode(encryptedMsg, BarcodeFormat.QR_CODE, 512, 512);
+                        int width = bitMatrix.getWidth();
+                        int height = bitMatrix.getHeight();
+                        Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+                            }
+
+                        }
+
+
+                        qrCodeImg.setImageBitmap(bmp);
+
+                    } catch (WriterException e) {
+                        e.printStackTrace();
+                    }
+
+                    dialog.show();
+
+                    return true;
+
+                }
+            });
+
+            holder.flip_back5.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+
+                    dialog = new Dialog(getActivity(), R.style.Dialog);
+                    dialog.setContentView(R.layout.qr_code_image);
+                    dialog.setTitle("Scan QRCode");
+
+                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+                    dialog.setCanceledOnTouchOutside(true);
+
+                    qrCodeImg = dialog.findViewById(R.id.qrCodeImages);
+
+                    QRCodeWriter writer = new QRCodeWriter();
+
+                    String qrCodeData = savedUserDetailModelClass.getName() + "EZVZ" + savedUserDetailModelClass.getAddress() + "EZVZ" + savedUserDetailModelClass.getPhone() + "EZVZ" + savedUserDetailModelClass.getEmail() + "EZVZ" + savedUserDetailModelClass.getWeb() + "EZVZ" + savedUserDetailModelClass.getUser_logo() + "EZVZ" + savedUserDetailModelClass.getPosition() + "EZVZ" + savedUserDetailModelClass.getColorCode() + "EZVZ" + savedUserDetailModelClass.getDevice_id() + "EZVZ" + savedUserDetailModelClass.getUsed_layout() + "EZVZ" + savedUserDetailModelClass.getCompany() + "EZVZ" + savedUserDetailModelClass.getFaxNo() + "EZVZ" + savedUserDetailModelClass.getPoBoxNo() + "EZVZ" + savedUserDetailModelClass.getColorCode();
+                    String password = "EzVz";
+                    String encryptedMsg = "";
+                    try {
+                        encryptedMsg = AESCrypt.encrypt(password, qrCodeData);
+                    } catch (GeneralSecurityException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        BitMatrix bitMatrix = writer.encode(encryptedMsg, BarcodeFormat.QR_CODE, 512, 512);
+                        int width = bitMatrix.getWidth();
+                        int height = bitMatrix.getHeight();
+                        Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+                            }
+
+                        }
+
+
+                        qrCodeImg.setImageBitmap(bmp);
+
+                    } catch (WriterException e) {
+                        e.printStackTrace();
+                    }
+
+                    dialog.show();
+
+                    return true;
+
+                }
+            });
+
+
+            holder.up_downView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+
+                    dialog = new Dialog(getActivity(), R.style.Dialog);
+                    dialog.setContentView(R.layout.qr_code_image);
+                    dialog.setTitle("Scan QRCode");
+
+                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+                    dialog.setCanceledOnTouchOutside(true);
+
+                    qrCodeImg = dialog.findViewById(R.id.qrCodeImages);
+
+                    QRCodeWriter writer = new QRCodeWriter();
+
+                    String qrCodeData = savedUserDetailModelClass.getName() + "EZVZ" + savedUserDetailModelClass.getAddress() + "EZVZ" + savedUserDetailModelClass.getPhone() + "EZVZ" + savedUserDetailModelClass.getEmail() + "EZVZ" + savedUserDetailModelClass.getWeb() + "EZVZ" + savedUserDetailModelClass.getUser_logo() + "EZVZ" + savedUserDetailModelClass.getPosition() + "EZVZ" + savedUserDetailModelClass.getColorCode() + "EZVZ" + savedUserDetailModelClass.getDevice_id() + "EZVZ" + savedUserDetailModelClass.getUsed_layout() + "EZVZ" + savedUserDetailModelClass.getCompany() + "EZVZ" + savedUserDetailModelClass.getFaxNo() + "EZVZ" + savedUserDetailModelClass.getPoBoxNo() + "EZVZ" + savedUserDetailModelClass.getColorCode();
+                    String password = "EzVz";
+                    String encryptedMsg = "";
+                    try {
+                        encryptedMsg = AESCrypt.encrypt(password, qrCodeData);
+                    } catch (GeneralSecurityException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        BitMatrix bitMatrix = writer.encode(encryptedMsg, BarcodeFormat.QR_CODE, 512, 512);
+                        int width = bitMatrix.getWidth();
+                        int height = bitMatrix.getHeight();
+                        Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+                            }
+
+                        }
+
+
+                        qrCodeImg.setImageBitmap(bmp);
+
+                    } catch (WriterException e) {
+                        e.printStackTrace();
+                    }
+
+                    dialog.show();
+
+                    return true;
+
+                }
+            });
+
+            holder.curveView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+
+                    dialog = new Dialog(getActivity(), R.style.Dialog);
+                    dialog.setContentView(R.layout.qr_code_image);
+                    dialog.setTitle("Scan QRCode");
+
+                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+                    dialog.setCanceledOnTouchOutside(true);
+
+                    qrCodeImg = dialog.findViewById(R.id.qrCodeImages);
+
+                    QRCodeWriter writer = new QRCodeWriter();
+
+                    String qrCodeData = savedUserDetailModelClass.getName() + "EZVZ" + savedUserDetailModelClass.getAddress() + "EZVZ" + savedUserDetailModelClass.getPhone() + "EZVZ" + savedUserDetailModelClass.getEmail() + "EZVZ" + savedUserDetailModelClass.getWeb() + "EZVZ" + savedUserDetailModelClass.getUser_logo() + "EZVZ" + savedUserDetailModelClass.getPosition() + "EZVZ" + savedUserDetailModelClass.getColorCode() + "EZVZ" + savedUserDetailModelClass.getDevice_id() + "EZVZ" + savedUserDetailModelClass.getUsed_layout() + "EZVZ" + savedUserDetailModelClass.getCompany() + "EZVZ" + savedUserDetailModelClass.getFaxNo() + "EZVZ" + savedUserDetailModelClass.getPoBoxNo() + "EZVZ" + savedUserDetailModelClass.getColorCode();
+                    String password = "EzVz";
+                    String encryptedMsg = "";
+                    try {
+                        encryptedMsg = AESCrypt.encrypt(password, qrCodeData);
+                    } catch (GeneralSecurityException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        BitMatrix bitMatrix = writer.encode(encryptedMsg, BarcodeFormat.QR_CODE, 512, 512);
+                        int width = bitMatrix.getWidth();
+                        int height = bitMatrix.getHeight();
+                        Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+                            }
+
+                        }
+
+
+                        qrCodeImg.setImageBitmap(bmp);
+
+                    } catch (WriterException e) {
+                        e.printStackTrace();
+                    }
+
+                    dialog.show();
+
+                    return true;
+
+                }
+            });
+
+            holder.halfView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+
+                    dialog = new Dialog(getActivity(), R.style.Dialog);
+                    dialog.setContentView(R.layout.qr_code_image);
+                    dialog.setTitle("Scan QRCode");
+
+                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+                    dialog.setCanceledOnTouchOutside(true);
+
+                    qrCodeImg = dialog.findViewById(R.id.qrCodeImages);
+
+                    QRCodeWriter writer = new QRCodeWriter();
+
+                    String qrCodeData = savedUserDetailModelClass.getName() + "EZVZ" + savedUserDetailModelClass.getAddress() + "EZVZ" + savedUserDetailModelClass.getPhone() + "EZVZ" + savedUserDetailModelClass.getEmail() + "EZVZ" + savedUserDetailModelClass.getWeb() + "EZVZ" + savedUserDetailModelClass.getUser_logo() + "EZVZ" + savedUserDetailModelClass.getPosition() + "EZVZ" + savedUserDetailModelClass.getColorCode() + "EZVZ" + savedUserDetailModelClass.getDevice_id() + "EZVZ" + savedUserDetailModelClass.getUsed_layout() + "EZVZ" + savedUserDetailModelClass.getCompany() + "EZVZ" + savedUserDetailModelClass.getFaxNo() + "EZVZ" + savedUserDetailModelClass.getPoBoxNo() + "EZVZ" + savedUserDetailModelClass.getColorCode();
+                    String password = "EzVz";
+                    String encryptedMsg = "";
+                    try {
+                        encryptedMsg = AESCrypt.encrypt(password, qrCodeData);
+                    } catch (GeneralSecurityException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        BitMatrix bitMatrix = writer.encode(encryptedMsg, BarcodeFormat.QR_CODE, 512, 512);
+                        int width = bitMatrix.getWidth();
+                        int height = bitMatrix.getHeight();
+                        Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+                            }
+
+                        }
+
+
+                        qrCodeImg.setImageBitmap(bmp);
+
+                    } catch (WriterException e) {
+                        e.printStackTrace();
+                    }
+
+                    dialog.show();
+
+                    return true;
+
+                }
+            });
+
+            holder.halfCurveView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+
+                    dialog = new Dialog(getActivity(), R.style.Dialog);
+                    dialog.setContentView(R.layout.qr_code_image);
+                    dialog.setTitle("Scan QRCode");
+
+                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+                    dialog.setCanceledOnTouchOutside(true);
+
+                    qrCodeImg = dialog.findViewById(R.id.qrCodeImages);
+
+                    QRCodeWriter writer = new QRCodeWriter();
+
+                    String qrCodeData = savedUserDetailModelClass.getName() + "EZVZ" + savedUserDetailModelClass.getAddress() + "EZVZ" + savedUserDetailModelClass.getPhone() + "EZVZ" + savedUserDetailModelClass.getEmail() + "EZVZ" + savedUserDetailModelClass.getWeb() + "EZVZ" + savedUserDetailModelClass.getUser_logo() + "EZVZ" + savedUserDetailModelClass.getPosition() + "EZVZ" + savedUserDetailModelClass.getColorCode() + "EZVZ" + savedUserDetailModelClass.getDevice_id() + "EZVZ" + savedUserDetailModelClass.getUsed_layout() + "EZVZ" + savedUserDetailModelClass.getCompany() + "EZVZ" + savedUserDetailModelClass.getFaxNo() + "EZVZ" + savedUserDetailModelClass.getPoBoxNo() + "EZVZ" + savedUserDetailModelClass.getColorCode();
+                    String password = "EzVz";
+                    String encryptedMsg = "";
+                    try {
+                        encryptedMsg = AESCrypt.encrypt(password, qrCodeData);
+                    } catch (GeneralSecurityException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        BitMatrix bitMatrix = writer.encode(encryptedMsg, BarcodeFormat.QR_CODE, 512, 512);
+                        int width = bitMatrix.getWidth();
+                        int height = bitMatrix.getHeight();
+                        Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+                            }
+
+                        }
+
+
+                        qrCodeImg.setImageBitmap(bmp);
+
+                    } catch (WriterException e) {
+                        e.printStackTrace();
+                    }
+
+                    dialog.show();
+
+                    return true;
+
+                }
+            });
+
+            holder.sideView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+
+                    dialog = new Dialog(getActivity(), R.style.Dialog);
+                    dialog.setContentView(R.layout.qr_code_image);
+                    dialog.setTitle("Scan QRCode");
+
+                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+                    dialog.setCanceledOnTouchOutside(true);
+
+                    qrCodeImg = dialog.findViewById(R.id.qrCodeImages);
+
+                    QRCodeWriter writer = new QRCodeWriter();
+
+                    String qrCodeData = savedUserDetailModelClass.getName() + "EZVZ" + savedUserDetailModelClass.getAddress() + "EZVZ" + savedUserDetailModelClass.getPhone() + "EZVZ" + savedUserDetailModelClass.getEmail() + "EZVZ" + savedUserDetailModelClass.getWeb() + "EZVZ" + savedUserDetailModelClass.getUser_logo() + "EZVZ" + savedUserDetailModelClass.getPosition() + "EZVZ" + savedUserDetailModelClass.getColorCode() + "EZVZ" + savedUserDetailModelClass.getDevice_id() + "EZVZ" + savedUserDetailModelClass.getUsed_layout() + "EZVZ" + savedUserDetailModelClass.getCompany() + "EZVZ" + savedUserDetailModelClass.getFaxNo() + "EZVZ" + savedUserDetailModelClass.getPoBoxNo() + "EZVZ" + savedUserDetailModelClass.getColorCode();
+                    String password = "EzVz";
+                    String encryptedMsg = "";
+                    try {
+                        encryptedMsg = AESCrypt.encrypt(password, qrCodeData);
+                    } catch (GeneralSecurityException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        BitMatrix bitMatrix = writer.encode(encryptedMsg, BarcodeFormat.QR_CODE, 512, 512);
+                        int width = bitMatrix.getWidth();
+                        int height = bitMatrix.getHeight();
+                        Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+                            }
+
+                        }
+
+
+                        qrCodeImg.setImageBitmap(bmp);
+
+                    } catch (WriterException e) {
+                        e.printStackTrace();
+                    }
+
+                    dialog.show();
+
+                    return true;
+
+                }
+            });
 
         }
 
@@ -1064,5 +1578,8 @@ public class ListFragment extends Fragment {
             }
         }
     }
+
+
+
 
 }

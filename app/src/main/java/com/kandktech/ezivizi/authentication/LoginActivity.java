@@ -346,7 +346,11 @@ public class LoginActivity extends AppCompatActivity {
                                             if (bm != null) {
                                                 dbHandler.deleteDataSingle(product.getUser_id());
                                                 dbHandler.insertData(product.getName(),product.getAddress(),product.getPhone(),product.getWeblink(),product.getEmail(),product.getPosition(),product.getUser_id(),"/storage/emulated/0/Pictures/.ezvz/" + product.getImage().replaceAll(RetrofitClient.imageUrl, ""),product.getColor_code(),product.getLayout(),product.getCompany_name(),product.getColor_code_second(),product.getFax_no(),product.getPo_box_no());
-                                                generateQrCode(product.getName(),product.getAddress(),product.getEmail(),product.getPhone(),product.getWeblink(),product.getPosition(),"/storage/emulated/0/Pictures/.ezvz/" + product.getImage().replaceAll(RetrofitClient.imageUrl, ""),product.getColor_code(),product.getLayout(),product.getCompany_name(),product.getFax_no(),product.getPo_box_no(),product.getColor_code_second(),product.getUser_id());
+                                                if (product.getUser_id().equals(sharedPreferenceClass.getUid())){
+
+                                                    generateQrCode(product.getName(),product.getAddress(),product.getEmail(),product.getPhone(),product.getWeblink(),product.getPosition(),"/storage/emulated/0/Pictures/.ezvz/" + product.getImage().replaceAll(RetrofitClient.imageUrl, ""),product.getColor_code(),product.getLayout(),product.getCompany_name(),product.getFax_no(),product.getPo_box_no(),product.getColor_code_second(),product.getUser_id());
+
+                                                }
                                                 startActivity(new Intent(getApplicationContext(), FirstPageActivity.class));
                                             }
 
@@ -375,7 +379,7 @@ public class LoginActivity extends AppCompatActivity {
         QRCodeWriter writer = new QRCodeWriter();
 
         String qrCodeData = userName + "EZVZ" + address + "EZVZ" + phone + "EZVZ" + email + "EZVZ" + website + "EZVZ" + filename1 + "EZVZ" + position + "EZVZ" + ColorCode + "EZVZ" + userId + "EZVZ" + usedLayout + "EZVZ" + company + "EZVZ" + fax_no + "EZVZ" + po_box_no + "EZVZ" + colorCodeSecond;
-        String password = String.valueOf(R.string.app_name);
+        String password = "EzVz";
         String encryptedMsg = "";
         try {
             encryptedMsg = AESCrypt.encrypt(password, qrCodeData);

@@ -999,7 +999,7 @@ public class CorporateActivity extends AppCompatActivity implements View.OnClick
         QRCodeWriter writer = new QRCodeWriter();
 
         String qrCodeData = userName + "EZVZ" + address + "EZVZ" + phone + "EZVZ" + email + "EZVZ" + website + "EZVZ" + filename1 + "EZVZ" + position + "EZVZ" + ColorCode + "EZVZ" + userId + "EZVZ" + usedLayout + "EZVZ" + company + "EZVZ" + fax_no + "EZVZ" + po_box_no + "EZVZ" + colorCodeSecond;
-        String password = String.valueOf(R.string.app_name);
+        String password = "EzVz";
         String encryptedMsg = "";
         try {
             encryptedMsg = AESCrypt.encrypt(password, qrCodeData);
@@ -1250,7 +1250,7 @@ public class CorporateActivity extends AppCompatActivity implements View.OnClick
                         String status = jsonObject.optString("status");
 
                         if (status.equals("1")){
-                            startActivity(new Intent(getApplicationContext(), CorporateList.class));
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             Toast.makeText(getApplicationContext(), "Saved Data Successfully", Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(getApplicationContext(), "Failed to save", Toast.LENGTH_SHORT).show();

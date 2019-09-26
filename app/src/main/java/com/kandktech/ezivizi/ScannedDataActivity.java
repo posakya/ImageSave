@@ -15,7 +15,7 @@ public class ScannedDataActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanned_data);
         TextView textView3 = findViewById(R.id.textView3);
-        String password = String.valueOf(R.string.app_name);
+        String password = "EzVz";
         String decryptedMsg = "";
         try {
             decryptedMsg = AESCrypt.decrypt(password, getIntent().getExtras().getString("qrData"));

@@ -25,9 +25,9 @@ import android.widget.Toast;
 
 import com.google.zxing.Result;
 import com.kandktech.ezivizi.DbHandler;
+import com.kandktech.ezivizi.MainActivity;
 import com.kandktech.ezivizi.R;
 import com.kandktech.ezivizi.authentication.SharedPreferenceClass;
-import com.kandktech.ezivizi.corporate.CorporateList;
 import com.kandktech.ezivizi.corporate.IndividualActivity;
 import com.kandktech.ezivizi.image_saver.ImageSaver;
 import com.kandktech.ezivizi.model_class.user_model.UserModelClass;
@@ -139,10 +139,12 @@ public class QRScanFragment extends Fragment implements ZXingScannerView.ResultH
 
         String data = result.getText();
 
-        String password = String.valueOf(R.string.app_name);
-        String decryptedMsg = "";
+        String password = "EzVz";
+        String decryptedMsg = null;
         try {
             decryptedMsg = AESCrypt.decrypt(password, data);
+
+            System.out.println("Decrypted : "+decryptedMsg);
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
         }
@@ -372,14 +374,15 @@ public class QRScanFragment extends Fragment implements ZXingScannerView.ResultH
                     (String user_name1, String user_address1, String user_phone1, String user_website1,String user_email1,String user_position1, String user_device_id1, String logo1,String color_code1,String used_layout1,String company1,String color_code_second1,String fax_no1,String po_box_no1){
                      */
 
+                            startActivity(new Intent(getActivity(), MainActivity.class));
 
-                            if (separated[0].equals("corporate")){
-                                Intent intent = new Intent(getActivity(), CorporateList.class);
-                                startActivity(intent);
-                            }else{
-                                Intent intent = new Intent(getActivity(), IndividualActivity.class);
-                                startActivity(intent);
-                            }
+//                            if (separated[0].equals("corporate")){
+//                                Intent intent = new Intent(getActivity(), CorporateList.class);
+//                                startActivity(intent);
+//                            }else{
+//                                Intent intent = new Intent(getActivity(), IndividualActivity.class);
+//                                startActivity(intent);
+//                            }
                             Toast.makeText(getActivity(), "Save", Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();

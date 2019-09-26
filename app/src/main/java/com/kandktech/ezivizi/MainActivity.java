@@ -667,7 +667,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         QRCodeWriter writer = new QRCodeWriter();
 
         String qrCodeData = userName + "EZVZ" + address + "EZVZ" + phone + "EZVZ" + email + "EZVZ" + website + "EZVZ" + filename1 + "EZVZ" + position + "EZVZ" + ColorCode + "EZVZ" + userId + "EZVZ" + usedLayout + "EZVZ" + company + "EZVZ" + fax_no + "EZVZ" + po_box_no + "EZVZ" + colorCodeSecond;
-        String password = String.valueOf(R.string.app_name);
+        String password = "EzVz";
         String encryptedMsg = "";
         try {
             encryptedMsg = AESCrypt.encrypt(password, qrCodeData);
